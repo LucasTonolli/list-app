@@ -1,18 +1,29 @@
 <script setup lang="ts">
-defineEmits(['add'])
+import type { List } from '@/types/List';
+
+defineProps<{
+  currentList: List
+}>()
+
+const emit = defineEmits<{
+  (e: 'selectList'): void
+  (e: 'createList'): void
+}>()
 </script>
 
 
 <template>
   <header class="header">
-    <h1 class="title">My Lists</h1>
+    <button class="list-select" @click="emit('selectList')">
+      <span>{{ currentList.title }}</span>
+      <i class="ri-arrow-down-s-line"></i>
+    </button>
 
-    <button class="icon-btn primary" @click="$emit('add')">
+    <button class="icon-btn primary" @click="emit('createList')">
       <i class="ri-add-line"></i>
     </button>
   </header>
 </template>
-
 
 
 <style scoped>
@@ -25,8 +36,18 @@ defineEmits(['add'])
   border-bottom: 1px solid var(--color-border);
 }
 
-.title {
-  font-size: 1.2rem;
-  font-weight: 600;
+.list-select {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.name {
+  max-width: 220px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

@@ -1,17 +1,51 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue';
 import MainFooter from './components/MainFooter.vue';
 import MainHeader from './components/MainHeader.vue';
+import { useLists } from './composable/useLists';
+import type { List } from './types/List';
+import { useRoute } from 'vue-router';
+import ListSelector from './components/dialogs/ListSelector.vue';
 
+
+const route = useRoute()
+const {getLists, getListById} = useLists()
+const lists = ref(getLists())
+const listId = computed(() => Number(route.params.id))
+const currentList = computed(() => getListById(listId.value))
+const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
+function openListSelect(): void {
+  listSelect.value?.open()
+}
+
+function openCreateList(): void {
+  // open create list dialog
+}
+
+function selectList(list: List): void {
+  currentList.value = list
+}
 </script>
 
 <template>
-  <MainHeader />
+  <MainHeader
+    :current-list="currentList"
+    @select-list="openListSelect"
+    @create-list="openCreateList"
+   />
 
-  <main>
+  <main class="container">
     <RouterView />
   </main>
 
   <MainFooter />
+
+  <ListSelector
+    ref="listSelect"
+    :lists="lists"
+    :current-list-id="currentList.id"
+    @select="selectList"
+  />
 </template>
 
 <style scoped></style>

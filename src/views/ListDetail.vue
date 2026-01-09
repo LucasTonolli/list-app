@@ -5,13 +5,14 @@ import { useLists } from '@/composable/useLists';
 import { useRoute } from 'vue-router';
 import FloatingAddButton from '@/components/FloatingAddButton.vue';
 import AddListItem from '@/components/dialogs/AddListItem.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 
 const { getListById, toggleItem, removeItem } = useLists()
-const listId = Number(useRoute().params.id)
-const list = getListById(listId)
+const route = useRoute()
+const listId = computed(() => Number(route.params.id))
+const list = computed(() => getListById(listId.value))
 const dialog = ref<InstanceType<typeof AddListItem> | null>(null)
 
 function openDialog(): void {
@@ -21,7 +22,7 @@ function openDialog(): void {
 </script>
 
 <template>
-  <section class="container">
+  <section class="">
     <div class="list-container">
       <ListItemRow
         v-for="item in list?.items"
