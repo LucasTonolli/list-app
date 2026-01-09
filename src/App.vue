@@ -1,17 +1,17 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import MainFooter from './components/MainFooter.vue';
+import MainHeader from './components/MainHeader.vue';
+
+</script>
 
 <template>
-  <header>
-    nav
-  </header>
+  <MainHeader />
 
   <main>
     <RouterView />
   </main>
 
-  <footer>
-    footer
-  </footer>
+  <MainFooter />
 </template>
 
 <style scoped></style>

@@ -16,6 +16,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "remixicon": "^4.8.0",
     "vue": "^3.5.26",
     "vue-router": "^4.6.4"
   },

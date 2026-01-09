@@ -3,34 +3,56 @@
 <script setup lang="ts">
 import { useLists } from '@/composable/useLists';
 import { useRoute } from 'vue-router';
-import { reactive } from 'vue';
+import FloatingAddButton from '@/components/FloatingAddButton.vue';
+import AddListItem from '@/components/dialogs/AddListItem.vue';
+import { ref } from 'vue';
+import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 
-const { getListById, toggleItem, addItem } = useLists()
+const { getListById, toggleItem, removeItem } = useLists()
 const listId = Number(useRoute().params.id)
 const list = getListById(listId)
+const dialog = ref<InstanceType<typeof AddListItem> | null>(null)
 
-const form = reactive({
-  name: ''
-});
-
-const handleSubmit = () => {
-  if(!form.name.trim()) return;
-  const itemName = form.name.trim()
-  addItem(listId, itemName)
-  form.name = ''
+function openDialog(): void {
+  dialog.value?.open()
 }
+
 </script>
 
 <template>
-  <h1>List {{ listId }}</h1>
-  <div v-for="item in list?.items" :key="item.id">
-    <input type="checkbox" name="" id="item-{{ item.id }}" :checked="item.checked" @change="toggleItem(listId, item.id)"/>
-    <label for="item-{{ item.id }}">{{ item.name }}</label>
-  </div>
+  <section class="container">
+    <div class="list-container">
+      <ListItemRow
+        v-for="item in list?.items"
+        :key="item.id"
+        :item="item"
+        :list-id="listId"
+        @toggle="toggleItem(listId, item.id)"
+        @remove="removeItem(listId, item.id)"
+      />
+    </div>
 
-  <form @submit.prevent="handleSubmit">
-    <input type="text" name="item-name" id="item-name" v-model="form.name" placeholder="Item name">
-    <button type="submit">Add item</button>
-  </form>
+    <p v-if="list?.items.length === 0" class="empty">
+      Sem itens na lista
+    </p>
+
+    <FloatingAddButton @click="openDialog" />
+    <AddListItem ref="dialog" :listId="listId"/>
+  </section>
 </template>
+
+<style scoped>
+.list-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+.empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--space-md);
+  background-color: #ddd;
+  border-radius: var(--radius-md);
+}
+</style>

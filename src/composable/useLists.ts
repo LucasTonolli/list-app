@@ -98,6 +98,13 @@ const toggleItem = (listId: number, itemId: number) => {
 
 }
 
+const removeItem = (listId: number, itemId: number) => {
+  const list = lists.value.find(list => list.id === listId)
+  if (list) {
+    list.items = list.items.filter(item => item.id !== itemId)
+  }
+}
+
 const init = () => {
   if (lists.value.length) return
 
@@ -119,6 +126,7 @@ export function useLists() {
     getLists,
     getListById,
     addItem,
-    toggleItem
+    toggleItem,
+    removeItem
   }
 }
