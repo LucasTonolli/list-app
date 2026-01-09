@@ -25,7 +25,7 @@ const handleSubmit = () => {
 <template>
   <h1>List {{ listId }}</h1>
   <div v-for="item in list?.items" :key="item.id">
-    <input type="checkbox" name="" id="item-{{ item.id }}" :v-model="item.checked" @change="toggleItem(listId, item.id)"/>
+    <input type="checkbox" name="" id="item-{{ item.id }}" :checked="item.checked" @change="toggleItem(listId, item.id)"/>
     <label for="item-{{ item.id }}">{{ item.name }}</label>
   </div>
 

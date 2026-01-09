@@ -1,8 +1,9 @@
-import {  ref } from "vue"
+import { ref, watch } from "vue"
 import type { List } from "@/types/List"
 import type { ListItem } from "@/types/ListItem"
 
 const lists = ref<List[]>([])
+const STORAGE_KEY = 'lists'
 
 const mockLists: List[] =  [
     {
@@ -14,7 +15,6 @@ const mockLists: List[] =  [
           name: 'Item 1',
           description: null,
           checked: false,
-          position: 1,
           createdAt: '2023-01-01',
           updatedAt: '2023-01-01'
         }
@@ -31,7 +31,6 @@ const mockLists: List[] =  [
           name: 'Item 2',
           description: null,
           checked: false,
-          position: 1,
           createdAt: '2023-01-01',
           updatedAt: '2023-01-01'
         }
@@ -48,7 +47,6 @@ const mockLists: List[] =  [
           name: 'Item 3',
           description: null,
           checked: false,
-          position: 1,
           createdAt: '2023-01-01',
           updatedAt: '2023-01-01'
         }
@@ -57,6 +55,20 @@ const mockLists: List[] =  [
       updatedAt: '2023-01-01'
     }
   ]
+const createList = (title: string) => {
+  const list: List = {
+    id: lists.value.length + 1,
+    title,
+    items: [],
+    createdAt: '2023-01-01',
+    updatedAt: '2023-01-01'
+  }
+  lists.value.push(list)
+}
+
+const deleteList = (id: number) => {
+  lists.value = lists.value.filter(list => list.id !== id)
+}
 const getLists = () => {
   return lists.value
 }
@@ -73,7 +85,6 @@ const addItem = (listId: number, itemName: string) => {
       name: itemName,
       description: null,
       checked: false,
-      position: 1,
       createdAt: '2023-01-01',
       updatedAt: '2023-01-01'
     }
@@ -82,22 +93,29 @@ const addItem = (listId: number, itemName: string) => {
 }
 
 const toggleItem = (listId: number, itemId: number) => {
-  const list = lists.value.find(list => list.id === listId)
-  if (list) {
-    const item = list.items.find(item => item.id === itemId)
-    if (item) {
-      alert("Toggle item " + item.name)
-      item.checked = !item.checked
-    }
-  }
+  const item = getListById(listId)?.items.find(i => i.id === itemId)
+  if (item) item.checked = !item.checked
+
 }
 
-lists.value = mockLists
+const init = () => {
+  if (lists.value.length) return
+
+  const stored = localStorage.getItem(STORAGE_KEY)
+  lists.value = stored ? JSON.parse(stored) : mockLists
+}
+
 
 export function useLists() {
+  init()
+
+  watch(lists, () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(lists.value))
+  }, { deep: true })
 
   return {
-    lists,
+    createList,
+    deleteList,
     getLists,
     getListById,
     addItem,
