@@ -3,7 +3,6 @@ export interface ListItem{
   name: string,
   description: null|string,
   checked: boolean
-  position: number
-  created_at: string
-  updated_at: string
+  createdAt: string
+  updatedAt: string
 }
