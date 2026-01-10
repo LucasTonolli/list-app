@@ -1,48 +1,111 @@
-# lists-app
+Sure 🙂
+Here’s a **simple, clean `README.md`** that fits your project’s current scope and maturity.
 
-This template should help get you started developing with Vue 3 in Vite.
+You can copy-paste and adjust names if needed.
 
-## Recommended IDE Setup
+---
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+```md
+# 📋 Lists App
 
-## Recommended Browser Setup
+A simple and clean list management app built with **Vue 3**, **TypeScript**, and the **Composition API**.
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+The goal of this project is to practice:
+- Component-based architecture
+- State management via composables
+- Clean UX for list and item handling
+- Vue Router navigation patterns
 
-## Type Support for `.vue` Imports in TS
+---
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+## ✨ Features
 
-## Customize configuration
+- Create multiple lists
+- Add, toggle and remove items
+- Switch between lists
+- Empty states handling
+- Mobile-first UI
+- Dialog-based interactions
+- Not Found route handling
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## 🧱 Tech Stack
 
-```sh
-npm install
+- **Vue 3**
+- **TypeScript**
+- **Vue Router**
+- **Composition API**
+- **Vite**
+
+---
+
+## 📁 Project Structure
+
 ```
 
-### Compile and Hot-Reload for Development
+src/
+├─ assets/
+├─ components/
+│  ├─ dialogs/
+│  ├─ ListItem/
+│  ├─ MainHeader.vue
+│  └─ FloatingAddButton.vue
+├─ composable/
+│  └─ useLists.ts
+├─ router/
+├─ views/
+│  ├─ ListsIndex.vue
+│  ├─ ListDetail.vue
+│  └─ NotFound.vue
+└─ types/
 
-```sh
+````
+
+---
+
+## 🚀 Getting Started
+
+### Install dependencies
+```bash
+npm install
+````
+
+### Run development server
+
+```bash
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+---
 
-```sh
-npm run build
-```
+## 🧠 Architectural Notes
 
-### Lint with [ESLint](https://eslint.org/)
+* Global state is handled via a **composable (`useLists`)**
+* Views are responsible for:
 
-```sh
-npm run lint
+  * Routing
+  * Fetching data from composables
+* Components are:
+
+  * Dumb / presentational
+  * Communicate via props and emits
+* Dialogs expose their API using `defineExpose`
+
+---
+
+## 📌 Future Ideas
+
+* Persist data (LocalStorage or API)
+* List sharing via hash links
+* Edit list items
+* Animations for list changes
+* Keyboard accessibility improvements
+
+---
+
+## 📄 License
+
+This project is for learning and personal use.
+
 ```
