@@ -13,9 +13,8 @@ import SimpleToast from './components/notifications/SimpleToast.vue';
 const route = useRoute()
 const router = useRouter()
 
-const {getLists, getListById, createList, removeList} = useLists()
+const {lists, getListById, createList, removeList} = useLists()
 
-const lists = computed(() => getLists())
 const listId = computed(() => String(route.params.id))
 const currentList = computed(() => getListById(listId.value))
 

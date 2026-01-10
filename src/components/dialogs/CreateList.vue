@@ -7,7 +7,7 @@ const emit = defineEmits<{
   (e: 'create', title: string): void
 }>()
 
-const {getLists} = useLists()
+const {lists} = useLists()
 
 const dialogRef = ref<HTMLDialogElement | null>(null)
 const title = ref('')
@@ -24,8 +24,8 @@ function close() {
 function submit() {
   if (!title.value.trim()) return
   emit('create', title.value.trim())
-  const lists =  getLists();
-  const lastList = lists[lists.length - 1];
+
+  const lastList = lists.value[lists.value.length - 1];
   router.push({ name: 'list', params: { id: lastList?.id } })
   close()
 }

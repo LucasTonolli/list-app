@@ -1,4 +1,4 @@
-import { ref, watch } from "vue"
+import { ref, watch, computed } from "vue"
 import type { List } from "@/types/List"
 import type { ListItem } from "@/types/ListItem"
 
@@ -74,14 +74,10 @@ const createList = (title: string): List => {
 const removeList = (id: string) => {
   lists.value = lists.value.filter(list => list.id !== id)
 }
-const getLists = (): List[] => {
-  return lists.value
-}
+const getLists = computed(() => lists.value)
 
-const getListById = (id: string): List|undefined =>  {
-  const list = lists.value.find(list => list.id === id)
-  return list
-}
+const getListById = (id: string) =>
+  lists.value.find(list => list.id === id)
 
 const addItem = (listId: string, itemName: string) => {
   const list = lists.value.find(list => list.id === listId)
@@ -122,14 +118,14 @@ const init = () => {
 export function useLists() {
   init()
 
-  watch(lists, () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(lists.value))
+  watch(() => lists.value, value => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
   }, { deep: true })
 
   return {
+    lists: getLists,
     createList,
     removeList,
-    getLists,
     getListById,
     addItem,
     toggleItem,
