@@ -7,8 +7,8 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'toggle', id: number): void
-  (e: 'remove', id: number): void
+  (e: 'toggle', id: string): void
+  (e: 'remove', id: string): void
 }>()
 
 
@@ -16,7 +16,9 @@ const emit = defineEmits<{
 
 <template>
   <div class="item" :class="{ done: item.checked }">
-    <button class="toggle" @click="emit('toggle', item.id)">
+    <button type="button" class="toggle" @click="emit('toggle', item.id)"
+        :aria-pressed="item.checked"
+        aria-label="Marcar item como concluído">
       <i
         :class="item.checked ? 'ri-checkbox-circle-fill' : 'ri-checkbox-blank-circle-line'"
       ></i>
@@ -30,11 +32,7 @@ const emit = defineEmits<{
     </div>
 
     <div class="actions">
-      <button class="icon-btn" @click="emit('edit', item)">
-        <i class="ri-pencil-line"></i>
-      </button>
-
-      <button class="icon-btn danger" @click="emit('remove', item.id)">
+      <button type="button" class="icon-btn danger" @click="emit('remove', item.id)"   aria-label="Remover item">
         <i class="ri-delete-bin-line"></i>
       </button>
     </div>
