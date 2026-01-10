@@ -111,7 +111,7 @@ const init = () => {
   if (lists.value.length) return
 
   const stored = localStorage.getItem(STORAGE_KEY)
-  lists.value = stored ? JSON.parse(stored) : mockLists
+  lists.value = stored ? JSON.parse(stored) : []
 }
 
 
