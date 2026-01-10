@@ -3,6 +3,8 @@
 ```md
 # 📋 Lists App
 
+🔗 Live Demo: https://list-app-beryl-iota.vercel.app/lists/b3cb1268-0467-4338-9d1d-15e8c3ffd8c2
+
 A simple and clean list management app built with **Vue 3**, **TypeScript**, and the **Composition API**.
 
 The goal of this project is to practice:
@@ -67,7 +69,7 @@ npm run dev
 ## 📌 Future Ideas
 
 * Persist data (API)
-* List sharing via hash links
+* Backend Integration: Plan to implement a Laravel API to enable list sharing via public hash links (Magic Links)
 * Edit list items
 * Animations for list changes
 * Keyboard accessibility improvements
