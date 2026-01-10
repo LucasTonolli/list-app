@@ -11,7 +11,7 @@ import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 const { getListById, toggleItem, removeItem } = useLists()
 const route = useRoute()
-const listId = computed(() => Number(route.params.id))
+const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const dialog = ref<InstanceType<typeof AddListItem> | null>(null)
 

@@ -2,7 +2,7 @@
 import type { List } from '@/types/List';
 
 defineProps<{
-  currentList: List
+  currentList: List|undefined
 }>()
 
 const emit = defineEmits<{
@@ -15,7 +15,7 @@ const emit = defineEmits<{
 <template>
   <header class="header">
     <button class="list-select" @click="emit('selectList')">
-      <span>{{ currentList.title }}</span>
+      <span>{{ currentList?.title }}</span>
       <i class="ri-arrow-down-s-line"></i>
     </button>
 

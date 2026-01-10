@@ -7,11 +7,11 @@ const STORAGE_KEY = 'lists'
 
 const mockLists: List[] =  [
     {
-      id: 1,
+      id: '1',
       title: 'List 1',
       items: [
         {
-          id: 1,
+          id: '1',
           name: 'Item 1',
           description: null,
           checked: false,
@@ -23,11 +23,11 @@ const mockLists: List[] =  [
       updatedAt: '2023-01-01'
     },
     {
-      id: 2,
+      id: '2',
       title: 'List 2',
       items: [
         {
-          id: 2,
+          id:' 2',
           name: 'Item 2',
           description: null,
           checked: false,
@@ -39,11 +39,11 @@ const mockLists: List[] =  [
       updatedAt: '2023-01-01'
     },
     {
-      id: 3,
+      id: '3',
       title: 'List 3',
       items: [
         {
-          id: 3,
+          id: '3',
           name: 'Item 3',
           description: null,
           checked: false,
@@ -57,7 +57,7 @@ const mockLists: List[] =  [
   ]
 const createList = (title: string) => {
   const list: List = {
-    id: lists.value.length + 1,
+    id: crypto.randomUUID(),
     title,
     items: [],
     createdAt: '2023-01-01',
@@ -66,22 +66,23 @@ const createList = (title: string) => {
   lists.value.push(list)
 }
 
-const deleteList = (id: number) => {
+const removeList = (id: string) => {
   lists.value = lists.value.filter(list => list.id !== id)
 }
-const getLists = () => {
+const getLists = (): List[] => {
   return lists.value
 }
 
-const getListById = (id: number) => {
-  return lists.value.find(list => list.id === id)
+const getListById = (id: string): List|undefined =>  {
+  const list = lists.value.find(list => list.id == id)
+  return list
 }
 
-const addItem = (listId: number, itemName: string) => {
+const addItem = (listId: string, itemName: string) => {
   const list = lists.value.find(list => list.id === listId)
   if (list) {
     const item: ListItem = {
-      id: list.items.length + 1,
+      id: crypto.randomUUID(),
       name: itemName,
       description: null,
       checked: false,
@@ -92,13 +93,13 @@ const addItem = (listId: number, itemName: string) => {
   }
 }
 
-const toggleItem = (listId: number, itemId: number) => {
+const toggleItem = (listId: string, itemId: string) => {
   const item = getListById(listId)?.items.find(i => i.id === itemId)
   if (item) item.checked = !item.checked
 
 }
 
-const removeItem = (listId: number, itemId: number) => {
+const removeItem = (listId: string, itemId: string) => {
   const list = lists.value.find(list => list.id === listId)
   if (list) {
     list.items = list.items.filter(item => item.id !== itemId)
@@ -122,7 +123,7 @@ export function useLists() {
 
   return {
     createList,
-    deleteList,
+    removeList,
     getLists,
     getListById,
     addItem,

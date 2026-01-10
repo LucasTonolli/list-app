@@ -1,7 +1,7 @@
 import type { ListItem } from "./ListItem"
 
 export interface List{
-  id: number,
+  id: string,
   title: string
   // description: null|string
   // hash: string

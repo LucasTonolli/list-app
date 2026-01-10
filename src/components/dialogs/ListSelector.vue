@@ -6,8 +6,12 @@ import { ref } from 'vue'
 
 defineProps<{
   lists: List[]
-  currentListId: number
+  currentListId: string|undefined
 }>()
+const emit = defineEmits<{
+  (e: 'removeList', id: string): void
+}>()
+
 
 const dialog = ref<HTMLDialogElement | null>(null)
 
@@ -36,8 +40,9 @@ defineExpose({ open, close })
 
       <ul class="list">
         <li
-          v-for="list in lists"
+          v-for="list in lists.values()"
           :key="list.id"
+          class="list-item-container"
         >
           <RouterLink
             class="list-item"
@@ -54,6 +59,9 @@ defineExpose({ open, close })
               class="ri-check-line"
             ></i>
           </RouterLink>
+          <button @click="emit('removeList', list.id)" class="icon-btn danger">
+            <i class="ri-delete-bin-line"></i>
+          </button>
         </li>
       </ul>
     </div>
@@ -81,6 +89,7 @@ defineExpose({ open, close })
   border-radius: 16px 16px 0 0;
   padding: var(--space-md);
   animation: slideUp 0.25s ease;
+  max-height: 50dvh;
 }
 
 @keyframes slideUp {
@@ -101,11 +110,20 @@ defineExpose({ open, close })
 
 .list {
   list-style: none;
+  height: 30dvh;
+  overflow-y: scroll;
 }
+.list-item-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-sm);
   padding: var(--space-sm);
   border-radius: var(--radius-sm);
 }

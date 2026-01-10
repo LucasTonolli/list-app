@@ -4,26 +4,39 @@ import MainFooter from './components/MainFooter.vue';
 import MainHeader from './components/MainHeader.vue';
 import { useLists } from './composable/useLists';
 import type { List } from './types/List';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import ListSelector from './components/dialogs/ListSelector.vue';
+import CreateList from './components/dialogs/CreateList.vue';
 
 
 const route = useRoute()
-const {getLists, getListById} = useLists()
-const lists = ref(getLists())
-const listId = computed(() => Number(route.params.id))
+const router = useRouter()
+
+const {getLists, getListById, createList, removeList} = useLists()
+
+const lists = computed(() => getLists())
+const listId = computed(() => String(route.params.id))
 const currentList = computed(() => getListById(listId.value))
+
 const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
+const createListDialog = ref<InstanceType<typeof CreateList> | null>(null)
 function openListSelect(): void {
   listSelect.value?.open()
 }
 
 function openCreateList(): void {
-  // open create list dialog
+  createListDialog.value?.open()
 }
 
 function selectList(list: List): void {
-  currentList.value = list
+ router.push({ name: 'list', params: { id: list.id } })
+}
+
+function remove(id: string): void {
+  removeList(id)
+  if(id == listId.value) {
+    router.push({ name: 'lists-index' })
+  }
 }
 </script>
 
@@ -43,9 +56,11 @@ function selectList(list: List): void {
   <ListSelector
     ref="listSelect"
     :lists="lists"
-    :current-list-id="currentList.id"
+    :current-list-id="currentList?.id"
     @select="selectList"
+    @remove-list="remove($event)"
   />
+  <CreateList ref="createListDialog" @create="createList" />
 </template>
 
 <style scoped></style>

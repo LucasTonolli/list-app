@@ -3,7 +3,7 @@ import { reactive, ref} from 'vue'
 import { useLists } from '@/composable/useLists';
 
 const props = defineProps<{
-  listId: number
+  listId: string
 }>()
 const dialog = ref<HTMLDialogElement | null>(null)
 const {addItem} = useLists()
