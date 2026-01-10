@@ -56,13 +56,15 @@ const mockLists: List[] =  [
     }
 ]
 
+const now = () => new Date().toISOString()
+
 const createList = (title: string): List => {
   const list: List = {
     id: crypto.randomUUID(),
     title,
     items: [],
-    createdAt: '2023-01-01',
-    updatedAt: '2023-01-01'
+    createdAt: now(),
+    updatedAt: now()
   }
   lists.value.push(list)
 
@@ -89,8 +91,8 @@ const addItem = (listId: string, itemName: string) => {
       name: itemName,
       description: null,
       checked: false,
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01'
+      createdAt: now(),
+      updatedAt: now()
     }
     list.items.push(item)
   }
