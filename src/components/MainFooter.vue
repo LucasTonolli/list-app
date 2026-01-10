@@ -1,6 +1,10 @@
+<script setup lang="ts">
+  const now = new Date()
+</script>
+
 <template>
   <footer class="footer">
-    <p>© 2026 · List App</p>
+    <p>© {{ now.getFullYear() }} · List App</p>
   </footer>
 </template>
 
