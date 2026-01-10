@@ -81,5 +81,3 @@ npm run dev
 ## 📄 License
 
 This project is for learning and personal use.
-
-```
