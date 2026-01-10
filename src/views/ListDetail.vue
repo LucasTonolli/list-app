@@ -2,16 +2,17 @@
 
 <script setup lang="ts">
 import { useLists } from '@/composable/useLists';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import FloatingAddButton from '@/components/FloatingAddButton.vue';
 import AddListItem from '@/components/dialogs/AddListItem.vue';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 import type { ListItem } from '@/types/ListItem';
 
 
 const { getListById, toggleItem, removeItem, addItem } = useLists()
 const route = useRoute()
+const router = useRouter()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
@@ -40,6 +41,16 @@ function handleRemoveItem(item: ListItem): void {
   removeItem(listId.value, item.id)
   emit('remove-item')
 }
+
+watch(
+  list,
+  (value) => {
+    if (!value) {
+      router.replace({ name: 'not-found' })
+    }
+  },
+  { immediate: true }
+)
 
 </script>
 

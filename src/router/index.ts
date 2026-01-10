@@ -13,7 +13,11 @@ const router = createRouter({
       name: 'list',
       component: () => import('../views/ListDetail.vue'),
     },
-
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('../views/NotFound.vue'),
+    },
   ],
 })
 
