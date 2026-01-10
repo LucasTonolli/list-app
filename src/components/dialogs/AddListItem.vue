@@ -13,6 +13,10 @@ const form = reactive({
   description: ''
 })
 
+const emit = defineEmits<{
+  (e: 'create'): void
+}>()
+
 
 function close(): void {
   dialog.value?.close()
@@ -23,6 +27,7 @@ function submit(): void {
 
  addItem(props.listId, form.name)
 
+  emit('create')
   form.name = ''
   form.description = ''
   close()

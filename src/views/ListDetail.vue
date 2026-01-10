@@ -14,6 +14,11 @@ const route = useRoute()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const dialog = ref<InstanceType<typeof AddListItem> | null>(null)
+const emit = defineEmits<{
+  (e: 'toggle-item', isChecked: boolean): void
+  (e: 'remove-item'): void
+  (e: 'create-item'): void
+}>()
 
 function openDialog(): void {
   dialog.value?.open()
@@ -29,8 +34,8 @@ function openDialog(): void {
         :key="item.id"
         :item="item"
         :list-id="listId"
-        @toggle="toggleItem(listId, item.id)"
-        @remove="removeItem(listId, item.id)"
+        @toggle="toggleItem(listId, item.id); emit('toggle-item', item.checked)"
+        @remove="removeItem(listId, item.id); emit('remove-item')"
       />
     </div>
 
@@ -39,7 +44,7 @@ function openDialog(): void {
     </p>
 
     <FloatingAddButton @click="openDialog" />
-    <AddListItem ref="dialog" :listId="listId"/>
+    <AddListItem ref="dialog" :listId="listId" @create="emit('create-item')"/>
   </section>
 </template>
 

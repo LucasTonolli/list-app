@@ -44,7 +44,21 @@ function handleRemoveList(id: string): void {
   if(id == listId.value) {
     router.push({ name: 'lists-index' })
   }
+   listSelect.value?.close()
   showNotification('Lista removida com sucesso', 'success')
+}
+
+function handleRemoveItem(): void {
+  showNotification('Item removido com sucesso', 'success')
+}
+
+function handleToggleItem(isChecked: boolean): void {
+  const message = isChecked ? 'Item marcado como concluído' : 'Item desmarcado'
+  showNotification(message, 'success')
+}
+
+function handleCreateItem(): void {
+  showNotification('Item criado com sucesso', 'success')
 }
 
 
@@ -75,7 +89,7 @@ const showNotification = (
    />
 
   <main class="container">
-    <RouterView />
+    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" />
   </main>
 
   <MainFooter />
