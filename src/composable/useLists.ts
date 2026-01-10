@@ -55,7 +55,7 @@ const mockLists: List[] =  [
       updatedAt: '2023-01-01'
     }
   ]
-const createList = (title: string) => {
+const createList = (title: string): List => {
   const list: List = {
     id: crypto.randomUUID(),
     title,
@@ -64,6 +64,8 @@ const createList = (title: string) => {
     updatedAt: '2023-01-01'
   }
   lists.value.push(list)
+
+  return list
 }
 
 const removeList = (id: string) => {

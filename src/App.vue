@@ -34,8 +34,9 @@ function handleSelectList(list: List): void {
 }
 
 function handleCreateList(title: string): void {
-  createList(title)
-  router.push({ name: 'list', params: { id: listId.value } })
+  const list = createList(title)
+
+  router.push({ name: 'list', params: { id: list.id } })
   showNotification('Lista criada com sucesso', 'success')
 }
 
