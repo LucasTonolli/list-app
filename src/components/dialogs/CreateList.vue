@@ -26,7 +26,7 @@ function submit() {
   emit('create', title.value.trim())
   const lists =  getLists();
   const lastList = lists[lists.length - 1];
-  router.push({ name: 'list', params: { id: lastList.id } })
+  router.push({ name: 'list', params: { id: lastList?.id } })
   close()
 }
 
@@ -44,7 +44,6 @@ defineExpose({ open })
       </header>
 
       <div class="field">
-        <label for="title">Nome da lista</label>
         <input
           id="title"
           v-model="title"
@@ -55,9 +54,7 @@ defineExpose({ open })
       </div>
 
       <footer class="sheet-actions">
-        <button type="button" class="btn ghost" @click="close">
-          Cancelar
-        </button>
+
         <button type="submit" class="btn primary">
           Criar
         </button>
@@ -134,6 +131,7 @@ defineExpose({ open })
   padding: var(--space-sm) var(--space-md);
   border-radius: var(--radius-sm);
   border: none;
+  width: 100%;
 }
 
 .btn.primary {
@@ -141,8 +139,4 @@ defineExpose({ open })
   color: #fff;
 }
 
-.btn.ghost {
-  background: transparent;
-  color: var(--color-muted);
-}
 </style>

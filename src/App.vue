@@ -7,6 +7,7 @@ import type { List } from './types/List';
 import { useRoute, useRouter } from 'vue-router';
 import ListSelector from './components/dialogs/ListSelector.vue';
 import CreateList from './components/dialogs/CreateList.vue';
+import SimpleToast from './components/notifications/SimpleToast.vue';
 
 
 const route = useRoute()
@@ -28,15 +29,41 @@ function openCreateList(): void {
   createListDialog.value?.open()
 }
 
-function selectList(list: List): void {
+function handleSelectList(list: List): void {
  router.push({ name: 'list', params: { id: list.id } })
 }
 
-function remove(id: string): void {
+function handleCreateList(title: string): void {
+  createList(title)
+  router.push({ name: 'list', params: { id: listId.value } })
+  showNotification('Lista criada com sucesso', 'success')
+}
+
+function handleRemoveList(id: string): void {
   removeList(id)
   if(id == listId.value) {
     router.push({ name: 'lists-index' })
   }
+  showNotification('Lista removida com sucesso', 'success')
+}
+
+
+const toast = ref({
+  show: false,
+  message: '',
+  type: 'success' as 'success' | 'error' | 'warning' | 'info',
+})
+
+const showNotification = (
+  message: string,
+  type: 'success' | 'error' | 'warning' | 'info' = 'success',
+) => {
+  toast.value = {
+    show: true,
+    message,
+    type,
+  }
+
 }
 </script>
 
@@ -57,10 +84,14 @@ function remove(id: string): void {
     ref="listSelect"
     :lists="lists"
     :current-list-id="currentList?.id"
-    @select="selectList"
-    @remove-list="remove($event)"
+    @select="handleSelectList"
+    @remove-list="handleRemoveList($event)"
   />
-  <CreateList ref="createListDialog" @create="createList" />
+  <CreateList ref="createListDialog" @create="handleCreateList" />
+  <SimpleToast  v-if="toast.show"
+      :message="toast.message"
+      :type="toast.type"
+      @close="toast.show = false" />
 </template>
 
 <style scoped></style>

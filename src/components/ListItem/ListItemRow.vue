@@ -30,11 +30,11 @@ const emit = defineEmits<{
     </div>
 
     <div class="actions">
-      <button class="icon-btn" @click="$emit('edit', item)">
+      <button class="icon-btn" @click="emit('edit', item)">
         <i class="ri-pencil-line"></i>
       </button>
 
-      <button class="icon-btn danger" @click="$emit('remove', item.id)">
+      <button class="icon-btn danger" @click="emit('remove', item.id)">
         <i class="ri-delete-bin-line"></i>
       </button>
     </div>
