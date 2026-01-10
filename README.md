@@ -17,7 +17,7 @@ The goal of this project is to practice:
 
 - Create multiple lists
 - Add, toggle and remove items
-- Persist data in *LocalStorage*
+- Persistence: Data is saved locally using LocalStorage
 - Switch between lists
 - Empty states handling
 - Mobile-first UI
