@@ -1,12 +1,7 @@
 <script setup lang="ts">
 import { reactive, ref} from 'vue'
-import { useLists } from '@/composable/useLists';
 
-const props = defineProps<{
-  listId: string
-}>()
 const dialog = ref<HTMLDialogElement | null>(null)
-const {addItem} = useLists()
 
 const form = reactive({
   name: '',
@@ -14,7 +9,7 @@ const form = reactive({
 })
 
 const emit = defineEmits<{
-  (e: 'create'): void
+  (e: 'create', payload: { name: string; description: string|null }): void
 }>()
 
 
@@ -25,9 +20,10 @@ function close(): void {
 function submit(): void {
   if (!form.name) return
 
- addItem(props.listId, form.name)
-
-  emit('create')
+  emit('create', {
+    name: form.name,
+    description: form.description
+  })
   form.name = ''
   form.description = ''
   close()
@@ -47,7 +43,7 @@ defineExpose({ open })
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="header">
         <h2>Novo item</h2>
-        <button class="icon-btn" @click="close">
+        <button type="button" class="icon-btn" @click="close">
           <i class="ri-close-line"></i>
         </button>
       </header>

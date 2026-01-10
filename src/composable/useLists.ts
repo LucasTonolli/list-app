@@ -79,13 +79,13 @@ const getLists = computed(() => lists.value)
 const getListById = (id: string) =>
   lists.value.find(list => list.id === id)
 
-const addItem = (listId: string, itemName: string) => {
+const addItem = (listId: string, itemName: string, itemDescription: string|null) => {
   const list = lists.value.find(list => list.id === listId)
   if (list) {
     const item: ListItem = {
       id: crypto.randomUUID(),
       name: itemName,
-      description: null,
+      description: itemDescription,
       checked: false,
       createdAt: now(),
       updatedAt: now()

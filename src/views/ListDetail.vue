@@ -9,7 +9,7 @@ import { computed, ref } from 'vue';
 import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 
-const { getListById, toggleItem, removeItem } = useLists()
+const { getListById, toggleItem, removeItem, addItem } = useLists()
 const route = useRoute()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
@@ -22,6 +22,11 @@ const emit = defineEmits<{
 
 function openDialog(): void {
   dialog.value?.open()
+}
+
+function handleCreateItem(payload: { name: string; description: string|null }): void {
+  addItem(listId.value, payload.name, payload.description)
+  emit('create-item')
 }
 
 </script>
@@ -44,7 +49,7 @@ function openDialog(): void {
     </p>
 
     <FloatingAddButton @click="openDialog" />
-    <AddListItem ref="dialog" :listId="listId" @create="emit('create-item')"/>
+    <AddListItem ref="dialog" :listId="listId" @create="handleCreateItem($event)"/>
   </section>
 </template>
 
