@@ -1,32 +1,25 @@
 <script setup lang="ts">
-import { useLists } from '@/composable/useLists';
-import router from '@/router';
 import { ref } from 'vue'
 
 const emit = defineEmits<{
   (e: 'create', title: string): void
 }>()
 
-const {lists} = useLists()
-
-const dialogRef = ref<HTMLDialogElement | null>(null)
+const dialog = ref<HTMLDialogElement | null>(null)
 const title = ref('')
 
 function open() {
-  dialogRef.value?.showModal()
+  dialog.value?.showModal()
 }
 
 function close() {
-  dialogRef.value?.close()
+  dialog.value?.close()
   title.value = ''
 }
 
 function submit() {
   if (!title.value.trim()) return
   emit('create', title.value.trim())
-
-  const lastList = lists.value[lists.value.length - 1];
-  router.push({ name: 'list', params: { id: lastList?.id } })
   close()
 }
 
@@ -34,7 +27,7 @@ defineExpose({ open })
 </script>
 
 <template>
-  <dialog ref="dialogRef" class="dialog">
+  <dialog ref="dialog" class="dialog">
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="sheet-header">
         <h2>Nova lista</h2>
