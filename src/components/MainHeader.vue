@@ -6,20 +6,20 @@ defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'selectList'): void
-  (e: 'createList'): void
+  (e: 'select-list'): void
+  (e: 'create-list'): void
 }>()
 </script>
 
 
 <template>
   <header class="header">
-    <button class="list-select" @click="emit('selectList')">
-      <span>{{ currentList?.title }}</span>
+    <button type="button" class="list-select" @click="emit('select-list')" aria-label="Selecionar lista">
+      <span class="name">{{ currentList?.title ?? 'Selecionar lista' }}</span>
       <i class="ri-arrow-down-s-line"></i>
     </button>
 
-    <button class="icon-btn primary" @click="emit('createList')">
+    <button type="button" class="icon-btn primary" @click="emit('create-list')"  aria-label="Criar nova lista">
       <i class="ri-add-line"></i>
     </button>
   </header>
