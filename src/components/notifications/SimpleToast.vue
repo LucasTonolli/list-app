@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, onUnmounted } from 'vue'
 
 type ToastType = 'success' | 'error' | 'warning' | 'info'
+let timer: number
 
-const props = defineProps<{
+const props = withDefaults( defineProps<{
   message: string
   type?: ToastType
-  icon?: ''
-}>()
-
+  icon?: string
+}>(), {
+  type: 'success'}
+)
 const emit = defineEmits(['close'])
 
 const iconClass = computed(() => {
@@ -26,15 +28,20 @@ const iconClass = computed(() => {
 })
 
 onMounted(() => {
+
   const duration = props.type === 'error' ? 5000 : 3000
-  setTimeout(() => {
+  timer = setTimeout(() => {
     emit('close')
   }, duration)
+})
+
+onUnmounted(() => {
+  clearTimeout(timer)
 })
 </script>
 
 <template>
-  <div class="toast" :class="type || 'success'">
+  <div class="toast" :class="props.type">
     <i :class="iconClass" class="toastIcon"></i>
     <span>{{ message }}</span>
   </div>
@@ -55,7 +62,6 @@ onMounted(() => {
   z-index: 2000;
   color: white;
   font-weight: 500;
-  cursor: pointer;
   min-width: 300px;
   justify-content: center;
 
