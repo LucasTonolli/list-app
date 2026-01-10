@@ -15,6 +15,7 @@ const emit = defineEmits<{
 
 
 const dialog = ref<HTMLDialogElement | null>(null)
+const listToRemove = ref<List | null>(null)
 
 function open(): void {
   dialog.value?.showModal()
@@ -24,10 +25,11 @@ function close(): void {
   dialog.value?.close()
 }
 
-function remove(message: string, list: List): void {
-  if(confirm(message)) {
-   emit('remove', list.id)
-  }
+
+function confirmRemove() {
+  if (!listToRemove.value) return
+  emit('remove', listToRemove.value.id)
+  listToRemove.value = null
 }
 
 
@@ -45,6 +47,12 @@ defineExpose({ open, close })
         </button>
       </header>
 
+       <RouterLink to="/" class="global-link">
+        <i class="ri-list-check"></i>
+        Todas as listas
+      </RouterLink>
+
+      <hr />
       <ul class="list">
         <li
           v-for="list in lists"
@@ -63,7 +71,7 @@ defineExpose({ open, close })
               class="ri-check-line"
             ></i>
           </button>
-          <button @click.stop="remove('Tem certeza que deseja excluir essa lista?', list)" class="icon-btn danger"  aria-label="Remover lista">
+          <button @click.stop="listToRemove = list" class="icon-btn danger"  aria-label="Remover lista">
             <i class="ri-delete-bin-line"></i>
           </button>
         </li>
@@ -71,11 +79,39 @@ defineExpose({ open, close })
           Nenhuma lista criada
         </p>
       </ul>
+      <div v-if="listToRemove" class="confirm">
+        <p>
+          Excluir <strong>{{ listToRemove.title }}</strong>?
+        </p>
+        <div class="confirm-actions">
+          <button class="btn ghost" @click="listToRemove = null">
+            Cancelar
+          </button>
+          <button class="btn danger" @click="confirmRemove">
+            Excluir
+          </button>
+        </div>
+      </div>
     </div>
   </dialog>
 </template>
 
 <style scoped>
+
+
+.global-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-sm);
+  color: var(--color-muted);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: var(--space-sm) 0;
+}
 .dialog {
   padding: 0;
   border: none;
@@ -96,7 +132,7 @@ defineExpose({ open, close })
   border-radius: 16px 16px 0 0;
   padding: var(--space-md);
   animation: slideUp 0.25s ease;
-  max-height: 50dvh;
+  max-height: 70dvh;
 }
 
 @keyframes slideUp {
@@ -112,7 +148,7 @@ defineExpose({ open, close })
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-sm);
 }
 
 .list {
@@ -137,13 +173,41 @@ defineExpose({ open, close })
   border-radius: var(--radius-sm);
 }
 
-.list-item:active {
-  background: #f3f4f6;
+.list {
+  flex: 1;
+  overflow-y: auto;
 }
 
-.list-item.active {
-  font-weight: 600;
-  color: var(--color-primary);
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon-btn.subtle {
+  opacity: 0.5;
+}
+
+.icon-btn.subtle:active {
+  opacity: 1;
+}
+
+.confirm {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-sm);
+  background-color: #eee;
+  border-radius:  var(--radius-md);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
 }
 
 </style>
