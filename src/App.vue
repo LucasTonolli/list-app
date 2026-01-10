@@ -29,7 +29,8 @@ function openCreateList(): void {
 }
 
 function handleSelectList(list: List): void {
- router.push({ name: 'list', params: { id: list.id } })
+  router.push({ name: 'list', params: { id: list.id } })
+  listSelect.value?.close()
 }
 
 function handleCreateList(title: string): void {
@@ -44,7 +45,7 @@ function handleRemoveList(id: string): void {
   if(id == listId.value) {
     router.push({ name: 'lists-index' })
   }
-   listSelect.value?.close()
+  listSelect.value?.close()
   showNotification('Lista removida com sucesso', 'success')
 }
 
@@ -99,7 +100,7 @@ const showNotification = (
     :lists="lists"
     :current-list-id="currentList?.id"
     @select="handleSelectList"
-    @remove-list="handleRemoveList($event)"
+    @remove="handleRemoveList($event)"
   />
   <CreateList ref="createListDialog" @create="handleCreateList" />
   <SimpleToast  v-if="toast.show"

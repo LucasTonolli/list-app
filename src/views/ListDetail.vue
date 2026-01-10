@@ -70,11 +70,5 @@ function handleRemoveItem(item: ListItem): void {
   flex-direction: column;
   gap: var(--space-md);
 }
-.empty {
-  text-align: center;
-  color: var(--color-muted);
-  padding: var(--space-md);
-  background-color: #ddd;
-  border-radius: var(--radius-md);
-}
+
 </style>

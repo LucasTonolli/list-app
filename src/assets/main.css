@@ -94,3 +94,11 @@ input:focus, textarea:focus {
 .icon-btn.primary {
   color: var(--color-primary);
 }
+
+.empty {
+  text-align: center;
+  color: var(--color-muted);
+  padding: var(--space-md);
+  background-color: #ddd;
+  border-radius: var(--radius-md);
+}

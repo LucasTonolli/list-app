@@ -9,7 +9,8 @@ defineProps<{
   currentListId: string|undefined
 }>()
 const emit = defineEmits<{
-  (e: 'removeList', id: string): void
+  (e: 'select', list: List): void
+  (e: 'remove', id: string): void
 }>()
 
 
@@ -21,6 +22,12 @@ function open(): void {
 
 function close(): void {
   dialog.value?.close()
+}
+
+function remove(message: string, list: List): void {
+  if(confirm(message)) {
+   emit('remove', list.id)
+  }
 }
 
 
@@ -40,17 +47,14 @@ defineExpose({ open, close })
 
       <ul class="list">
         <li
-          v-for="list in lists.values()"
+          v-for="list in lists"
           :key="list.id"
           class="list-item-container"
         >
-          <RouterLink
+          <button
             class="list-item"
             :class="{ active: list.id === currentListId }"
-            :to="{
-              name: 'list',
-              params: { id: list.id }
-            }"
+            @click="emit('select', list)"
           >
             <span>{{ list.title }}</span>
 
@@ -58,11 +62,14 @@ defineExpose({ open, close })
               v-if="list.id === currentListId"
               class="ri-check-line"
             ></i>
-          </RouterLink>
-          <button @click="emit('removeList', list.id)" class="icon-btn danger">
+          </button>
+          <button @click.stop="remove('Tem certeza que deseja excluir essa lista?', list)" class="icon-btn danger"  aria-label="Remover lista">
             <i class="ri-delete-bin-line"></i>
           </button>
         </li>
+        <p v-if="lists.length === 0" class="empty">
+          Nenhuma lista criada
+        </p>
       </ul>
     </div>
   </dialog>
@@ -112,7 +119,9 @@ defineExpose({ open, close })
   list-style: none;
   height: 30dvh;
   overflow-y: scroll;
+  overscroll-behavior: contain;
 }
+
 .list-item-container {
   display: flex;
   justify-content: space-between;
