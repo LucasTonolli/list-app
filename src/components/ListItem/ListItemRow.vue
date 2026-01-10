@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import type { ListItem } from '@/types/ListItem';
 
 
@@ -11,7 +12,7 @@ const emit = defineEmits<{
   (e: 'remove', id: string): void
 }>()
 
-
+const expanded = ref(false)
 </script>
 
 <template>
@@ -24,12 +25,21 @@ const emit = defineEmits<{
       ></i>
     </button>
 
-    <div class="content">
-      <p class="name">{{ item.name }}</p>
-      <p v-if="item.description" class="description">
+    <button
+      type="button"
+      class="content"
+      @click="expanded = !expanded"
+      :aria-expanded="expanded"
+    >
+      <p class="name">{{ item.name }} <i v-if="item.description" class="ri-file-add-line"></i></p>
+
+      <p
+        v-if="item.description && expanded"
+        class="description"
+      >
         {{ item.description }}
       </p>
-    </div>
+    </button>
 
     <div class="actions">
       <button type="button" class="icon-btn danger" @click="emit('remove', item.id)"   aria-label="Remover item">
@@ -48,16 +58,27 @@ const emit = defineEmits<{
   gap: var(--space-sm);
   padding: var(--space-sm);
   border-bottom: 1px solid var(--color-border);
-  background-color: #fff;
+  background: #fff;
+  border-radius: 8px;
 }
 
 .toggle {
   font-size: 1.4rem;
   color: var(--color-primary);
+  background: none;
+  border: none;
 }
 
 .content {
   flex: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .name {
@@ -67,12 +88,11 @@ const emit = defineEmits<{
 .description {
   font-size: 0.8rem;
   color: var(--color-muted);
-  margin-top: 2px;
+  line-height: 1.4;
 }
 
 .actions {
   display: flex;
-  gap: 4px;
 }
 
 .done .name {
@@ -80,3 +100,4 @@ const emit = defineEmits<{
   color: var(--color-muted);
 }
 </style>
+
