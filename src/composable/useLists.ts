@@ -54,7 +54,8 @@ const mockLists: List[] =  [
       createdAt: '2023-01-01',
       updatedAt: '2023-01-01'
     }
-  ]
+]
+
 const createList = (title: string): List => {
   const list: List = {
     id: crypto.randomUUID(),
@@ -76,7 +77,7 @@ const getLists = (): List[] => {
 }
 
 const getListById = (id: string): List|undefined =>  {
-  const list = lists.value.find(list => list.id == id)
+  const list = lists.value.find(list => list.id === id)
   return list
 }
 
