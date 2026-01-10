@@ -3,7 +3,7 @@
 ```md
 # 📋 Lists App
 
-🔗 Live Demo: https://list-app-beryl-iota.vercel.app/lists/b3cb1268-0467-4338-9d1d-15e8c3ffd8c2
+> [![Live Demo](https://img.shields.io/badge/Vercel-Live%20Demo-black?style=for-the-badge&logo=vercel)](https://list-app-beryl-iota.vercel.app)
 
 A simple and clean list management app built with **Vue 3**, **TypeScript**, and the **Composition API**.
 
