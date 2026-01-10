@@ -17,6 +17,7 @@ The goal of this project is to practice:
 
 - Create multiple lists
 - Add, toggle and remove items
+- Persist data in *LocalStorage*
 - Switch between lists
 - Empty states handling
 - Mobile-first UI
@@ -65,7 +66,7 @@ npm run dev
 
 ## 📌 Future Ideas
 
-* Persist data (LocalStorage or API)
+* Persist data (API)
 * List sharing via hash links
 * Edit list items
 * Animations for list changes
