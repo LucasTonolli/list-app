@@ -8,6 +8,9 @@ const router = useRouter()
 const { lists } = useLists()
 
 const hasLists = computed(() => lists.value.length > 0)
+const emit = defineEmits<{
+  (e: 'create-list'): void
+}>()
 
 function openList(id: string) {
   router.push({ name: 'list', params: { id } })
@@ -24,7 +27,7 @@ function openList(id: string) {
         compras e ideias em um só lugar.
       </p>
 
-      <button class="btn primary">
+      <button type="button" class="btn primary" aria-label="Criar lista" @click="emit('create-list')">
         <i class="ri-add-line"></i>
         Criar primeira lista
       </button>
