@@ -38,32 +38,6 @@ The goal of this project is to practice:
 - **Composition API**
 - **Vite**
 
----
-
-## 📁 Project Structure
-
-```
-```
-src/
-├─ assets/
-├─ components/
-│  ├─ dialogs/
-│  ├─ ListItem/
-│  ├─ MainHeader.vue
-│  └─ FloatingAddButton.vue
-├─ composable/
-│  └─ useLists.ts
-├─ router/
-├─ views/
-│  ├─ ListsIndex.vue
-│  ├─ ListDetail.vue
-│  └─ NotFound.vue
-└─ types/
-```
-````
-
----
-
 ## 🚀 Getting Started
 
 ### Install dependencies
