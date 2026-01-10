@@ -43,7 +43,7 @@ The goal of this project is to practice:
 ## 📁 Project Structure
 
 ```
-
+```
 src/
 ├─ assets/
 ├─ components/
@@ -59,7 +59,7 @@ src/
 │  ├─ ListDetail.vue
 │  └─ NotFound.vue
 └─ types/
-
+```
 ````
 
 ---
