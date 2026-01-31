@@ -71,6 +71,14 @@ const createList = (title: string): List => {
   return list
 }
 
+const updateList = (id: string, newTitle: string) => {
+  const list = lists.value.find(l => l.id === id)
+
+  if(!list) return;
+
+  list.title = newTitle
+}
+
 const removeList = (id: string) => {
   lists.value = lists.value.filter(list => list.id !== id)
 }
@@ -125,6 +133,7 @@ export function useLists() {
   return {
     lists: getLists,
     createList,
+    updateList,
     removeList,
     getListById,
     addItem,

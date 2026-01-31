@@ -11,6 +11,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'select', list: List): void
   (e: 'remove', id: string): void
+  (e: 'edit', id: string): void
 }>()
 
 
@@ -71,9 +72,15 @@ defineExpose({ open, close })
               class="ri-check-line"
             ></i>
           </button>
-          <button @click.stop="listToRemove = list" class="icon-btn danger"  aria-label="Remover lista">
-            <i class="ri-delete-bin-line"></i>
-          </button>
+          <div class="btn-actions">
+            <button type="button" class="icon-btn edit" @click="emit('edit', list.id)">
+              <i class="ri-pencil-line"></i>
+            </button>
+            <button @click.stop="listToRemove = list" class="icon-btn danger"  aria-label="Remover lista">
+              <i class="ri-delete-bin-line"></i>
+            </button>
+          </div>
+
         </li>
         <p v-if="lists.length === 0" class="empty">
           Nenhuma lista criada

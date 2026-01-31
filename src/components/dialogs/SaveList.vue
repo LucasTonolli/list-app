@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import type { List } from '@/types/List';
 import { ref } from 'vue'
 
+const list = ref<List | null>(null)
+
 const emit = defineEmits<{
-  (e: 'create', title: string): void
+  (e: 'save', title: string): void
 }>()
 
 const dialog = ref<HTMLDialogElement | null>(null)
@@ -15,22 +18,23 @@ function open() {
 function close() {
   dialog.value?.close()
   title.value = ''
+  list.value = null
 }
 
 function submit() {
   if (!title.value.trim()) return
-  emit('create', title.value.trim())
+  emit('save', title.value.trim())
   close()
 }
 
-defineExpose({ open })
+defineExpose({ open, list, title})
 </script>
 
 <template>
   <dialog ref="dialog" class="dialog">
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="sheet-header">
-        <h2>Nova lista</h2>
+        <h2 >{{ list ? 'Editar lista' : 'Criar nova lista' }}</h2>
         <button type="button" class="icon-btn" @click="close">
           <i class="ri-close-line"></i>
         </button>
@@ -49,7 +53,7 @@ defineExpose({ open })
       <footer class="sheet-actions">
 
         <button type="submit" class="btn primary">
-          Criar
+          {{ list ? 'Salvar' : 'Criar' }}
         </button>
       </footer>
     </form>
