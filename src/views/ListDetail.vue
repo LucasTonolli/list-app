@@ -4,7 +4,7 @@
 import { useLists } from '@/composable/useLists';
 import { useRoute, useRouter } from 'vue-router';
 import FloatingAddButton from '@/components/FloatingAddButton.vue';
-import AddListItem from '@/components/dialogs/AddListItem.vue';
+import SaveListItem from '@/components/dialogs/SaveListItem.vue';
 import { computed, ref, watch } from 'vue';
 import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 import type { ListItem } from '@/types/ListItem';
@@ -16,7 +16,7 @@ const router = useRouter()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
-const dialog = ref<InstanceType<typeof AddListItem> | null>(null)
+const dialog = ref<InstanceType<typeofSaveListItem> | null>(null)
 const emit = defineEmits<{
   (e: 'toggle-item', isChecked: boolean): void
   (e: 'remove-item'): void
@@ -82,7 +82,7 @@ watch(
     </p>
 
     <FloatingAddButton @click="openDialog(null)" />
-    <AddListItem ref="dialog" :listId="listId" @save="handleSaveItem($event)"/>
+    <SaveListItem ref="dialog" :listId="listId" @save="handleSaveItem($event)"/>
   </section>
 </template>
 
