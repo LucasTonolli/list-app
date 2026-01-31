@@ -16,7 +16,7 @@ const router = useRouter()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
-const dialog = ref<InstanceType<typeofSaveListItem> | null>(null)
+const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 const emit = defineEmits<{
   (e: 'toggle-item', isChecked: boolean): void
   (e: 'remove-item'): void
