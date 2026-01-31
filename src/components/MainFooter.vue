@@ -4,7 +4,7 @@
 
 <template>
   <footer class="footer">
-    <p>© {{ now.getFullYear() }} · List App</p>
+    <p>© {{ now.getFullYear() }} · List App</p> - Desenvolvido por <a href="https://lucas-tonolli.com.br/?referrer=list-app" target="_blank">Lucas Tonolli</a>
   </footer>
 </template>
 
