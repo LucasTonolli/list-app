@@ -10,7 +10,7 @@ import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 import type { ListItem } from '@/types/ListItem';
 
 
-const { getListById, toggleItem, removeItem, addItem } = useLists()
+const { getListById, toggleItem, removeItem, addItem, updateItem } = useLists()
 const route = useRoute()
 const router = useRouter()
 const listId = computed(() => String( route.params.id))
@@ -21,17 +21,15 @@ const emit = defineEmits<{
   (e: 'toggle-item', isChecked: boolean): void
   (e: 'remove-item'): void
   (e: 'create-item'): void
+  (e: 'edit-item'): void
 }>()
 
-function openDialog(): void {
+function openDialog(itemToEdit: ListItem|null): void {
+  if(itemToEdit) {
+    dialog.value!.item = itemToEdit
+  }
   dialog.value?.open()
 }
-
-function handleCreateItem(payload: { name: string; description: string|null }): void {
-  addItem(listId.value, payload.name, payload.description)
-  emit('create-item')
-}
-
 function handleToggleItem(item: ListItem): void {
   toggleItem(listId.value, item.id);
   emit('toggle-item', item.checked)
@@ -40,6 +38,18 @@ function handleToggleItem(item: ListItem): void {
 function handleRemoveItem(item: ListItem): void {
   removeItem(listId.value, item.id)
   emit('remove-item')
+}
+
+function handleSaveItem(payload: { name: string, description: string | null }): void {
+  const itemToEdit = dialog.value?.item
+
+  if (itemToEdit) {
+    updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
+    emit('edit-item')
+  } else {
+    addItem(listId.value, payload.name, payload.description)
+    emit('create-item')
+  }
 }
 
 watch(
@@ -63,6 +73,7 @@ watch(
         :item="item"
         @toggle="handleToggleItem(item)"
         @remove="handleRemoveItem(item)"
+        @edit="openDialog(item)"
       />
     </div>
 
@@ -70,8 +81,8 @@ watch(
       Sem itens na lista
     </p>
 
-    <FloatingAddButton @click="openDialog" />
-    <AddListItem ref="dialog" :listId="listId" @create="handleCreateItem($event)"/>
+    <FloatingAddButton @click="openDialog(null)" />
+    <AddListItem ref="dialog" :listId="listId" @save="handleSaveItem($event)"/>
   </section>
 </template>
 

@@ -102,6 +102,21 @@ const addItem = (listId: string, itemName: string, itemDescription: string|null)
   }
 }
 
+const updateItem = (listId: string, itemId: string, name: string, description: string|null) => {
+  const list = lists.value.find(list => list.id === listId)
+
+  if(!list) return
+
+  const item = list.items.find(item => item.id === itemId)
+
+  if(!item) return
+
+  item.name = name
+  item.description = description
+  item.updatedAt = now()
+
+}
+
 const toggleItem = (listId: string, itemId: string) => {
   const item = getListById(listId)?.items.find(i => i.id === itemId)
   if (item) item.checked = !item.checked
@@ -137,6 +152,7 @@ export function useLists() {
     removeList,
     getListById,
     addItem,
+    updateItem,
     toggleItem,
     removeItem
   }

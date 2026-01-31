@@ -10,6 +10,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'toggle', id: string): void
   (e: 'remove', id: string): void
+  (e: 'edit', id: string): void
 }>()
 
 const expanded = ref(false)
@@ -42,6 +43,9 @@ const expanded = ref(false)
     </button>
 
     <div class="actions">
+      <button type="button">
+        <i class="ri-edit-line" @click="emit('edit', item.id)" aria-label="Editar item"></i>
+      </button>
       <button type="button" class="icon-btn danger" @click="emit('remove', item.id)"   aria-label="Remover item">
         <i class="ri-delete-bin-line"></i>
       </button>

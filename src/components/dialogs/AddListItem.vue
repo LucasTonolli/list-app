@@ -1,39 +1,46 @@
 <script setup lang="ts">
+import type { ListItem } from '@/types/ListItem';
 import { reactive, ref} from 'vue'
 
 const dialog = ref<HTMLDialogElement | null>(null)
 
+const item = ref<ListItem | null>(null)
 const form = reactive({
-  name: '',
+  name:'',
   description: ''
 })
 
 const emit = defineEmits<{
-  (e: 'create', payload: { name: string; description: string|null }): void
+  (e: 'save', payload: { name: string; description: string|null }): void
 }>()
 
 
 function close(): void {
+  item.value = null
+  form.name = ''
+  form.description = ''
   dialog.value?.close()
 }
 
 function submit(): void {
   if (!form.name) return
 
-  emit('create', {
+  emit('save', {
     name: form.name,
     description: form.description
   })
-  form.name = ''
-  form.description = ''
+
   close()
 }
 
 function open(): void {
+  form.name = item.value?.name ?? ''
+  form.description = item.value?.description ?? ''
+
   dialog.value?.showModal()
 }
 
-defineExpose({ open })
+defineExpose({ open, item })
 
 </script>
 
@@ -42,7 +49,7 @@ defineExpose({ open })
   <dialog ref="dialog" class="dialog">
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="header">
-        <h2>Novo item</h2>
+        <h2>{{  item ? 'Editar item' : 'Criar novo item' }}</h2>
         <button type="button" class="icon-btn" @click="close">
           <i class="ri-close-line"></i>
         </button>
@@ -63,7 +70,7 @@ defineExpose({ open })
         ></textarea>
       </div>
 
-      <button class="submit">Adicionar item</button>
+      <button class="submit">{{ item ? 'Salvar' : 'Criar' }}</button>
     </form>
   </dialog>
 </template>

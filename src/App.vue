@@ -20,13 +20,13 @@ const currentList = computed(() => getListById(listId.value))
 
 const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
 
-const SaveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
+const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
 function openListSelect(): void {
   listSelect.value?.open()
 }
 
 function openSaveList(): void {
-  SaveListDialog.value?.open()
+  saveListDialog.value?.open()
 }
 
 function handleSelectList(list: List): void {
@@ -35,7 +35,7 @@ function handleSelectList(list: List): void {
 }
 
 function handleSaveList(title: string): void {
-  const listToEdit = SaveListDialog.value?.list
+  const listToEdit = saveListDialog.value?.list
 
   if(listToEdit){
     updateList(listToEdit.id, title)
@@ -69,16 +69,20 @@ function handleCreateItem(): void {
   showNotification('Item criado com sucesso', 'success')
 }
 
+function handleEditItem(): void {
+  showNotification('Item atualizado com sucesso', 'success')
+}
+
 function handleEdit(id: string): void {
   const listToEdit = getListById(id)
   if(!listToEdit) return
 
-  SaveListDialog.value!.list = listToEdit
-  SaveListDialog.value!.title = listToEdit.title
+  saveListDialog.value!.list = listToEdit
+  saveListDialog.value!.title = listToEdit.title
 
   listSelect.value?.close()
 
-  SaveListDialog.value?.open()
+  saveListDialog.value?.open()
 }
 
 
@@ -109,7 +113,7 @@ const showNotification = (
    />
 
   <main class="container">
-    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @create-list="openSaveList" />
+    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @edit-item="handleEditItem" />
   </main>
 
   <MainFooter />
