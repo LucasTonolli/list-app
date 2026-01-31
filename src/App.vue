@@ -109,7 +109,7 @@ const showNotification = (
    />
 
   <main class="container">
-    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @edit-item="handleEditItem" />
+    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @edit-item="handleEditItem" @create-list="openSaveList" />
   </main>
 
   <MainFooter />
