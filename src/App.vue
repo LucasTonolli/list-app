@@ -33,15 +33,6 @@ function handleSelectList(list: List): void {
   router.push({ name: 'list', params: { id: list.id } })
   listSelect.value?.close()
 }
-/**
- * @depracated
- */
-function handleCreateList(title: string): void {
-  const list = createList(title)
-
-  router.push({ name: 'list', params: { id: list.id } })
-  showNotification('Lista criada com sucesso', 'success')
-}
 
 function handleSaveList(title: string): void {
   const listToEdit = SaveListDialog.value?.list
