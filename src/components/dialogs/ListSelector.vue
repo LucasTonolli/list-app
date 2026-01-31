@@ -49,7 +49,7 @@ defineExpose({ open, close })
 
        <RouterLink to="/" class="global-link">
         <i class="ri-list-check"></i>
-        Todas as listas
+        Acessar todas as listas
       </RouterLink>
 
       <hr />
