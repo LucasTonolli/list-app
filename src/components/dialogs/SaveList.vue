@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { List } from '@/types/List';
-import { ref } from 'vue'
+import { ref, toRaw } from 'vue'
 
 const list = ref<List | null>(null)
 
 const emit = defineEmits<{
-  (e: 'save', title: string): void
+  (e: 'save',  payload: { title: string; listId: string | null }): void
 }>()
 
 const dialog = ref<HTMLDialogElement | null>(null)
@@ -23,11 +23,23 @@ function close() {
 
 function submit() {
   if (!title.value.trim()) return
-  emit('save', title.value.trim())
+  emit('save', {
+    title: title.value.trim(),
+    listId: list.value?.id ?? null
+  })
   close()
 }
 
-defineExpose({ open, list, title})
+function openForEdit(listToEdit: List) {
+
+  if(!listToEdit) return
+  list.value = { ...toRaw(listToEdit) }
+  title.value = list.value.title
+  open()
+}
+
+
+defineExpose({ open, openForEdit })
 </script>
 
 <template>

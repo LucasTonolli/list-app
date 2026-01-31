@@ -34,11 +34,9 @@ function handleSelectList(list: List): void {
   listSelect.value?.close()
 }
 
-function handleSaveList(title: string): void {
-  const listToEdit = saveListDialog.value?.list
-
-  if(listToEdit){
-    updateList(listToEdit.id, title)
+function handleSaveList({ title, listId }: { title: string; listId: string | null }): void {
+  if (listId) {
+    updateList(listId, title)
     showNotification('Lista atualizada com sucesso', 'success')
   } else {
     const newList = createList(title)
@@ -78,14 +76,11 @@ function handleEdit(id: string): void {
 
   if(!listToEdit) return
 
-  saveListDialog.value!.list = listToEdit
-  saveListDialog.value!.title = listToEdit.title
-
   listSelect.value?.close()
 
-  saveListDialog.value?.open()
-}
+  saveListDialog.value?.openForEdit(listToEdit)
 
+}
 
 const toast = ref({
   show: false,
