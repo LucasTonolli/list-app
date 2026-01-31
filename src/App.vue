@@ -75,6 +75,7 @@ function handleEditItem(): void {
 
 function handleEdit(id: string): void {
   const listToEdit = getListById(id)
+
   if(!listToEdit) return
 
   saveListDialog.value!.list = listToEdit
@@ -126,7 +127,7 @@ const showNotification = (
     @remove="handleRemoveList($event)"
     @edit="handleEdit($event)"
   />
-  <SaveList ref="SaveListDialog" @save="handleSaveList" />
+  <SaveList ref="saveListDialog" @save="handleSaveList" />
   <SimpleToast  v-if="toast.show"
       :message="toast.message"
       :type="toast.type"
