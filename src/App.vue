@@ -64,7 +64,7 @@ function handleToggleItem(isChecked: boolean): void {
 }
 
 function handleCreateItem(): void {
-  showNotification('Item criado com sucesso', 'success')
+  showNotification('Item adicionado com sucesso', 'success')
 }
 
 function handleEditItem(): void {

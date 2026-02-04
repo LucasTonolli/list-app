@@ -49,7 +49,7 @@ defineExpose({ open, item })
   <dialog ref="dialog" class="dialog">
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="header">
-        <h2>{{  item ? 'Editar item' : 'Criar novo item' }}</h2>
+        <h2>{{  item ? 'Editar item' : 'Adicionar item' }}</h2>
         <button type="button" class="icon-btn" @click="close">
           <i class="ri-close-line"></i>
         </button>
@@ -70,7 +70,7 @@ defineExpose({ open, item })
         ></textarea>
       </div>
 
-      <button class="submit">{{ item ? 'Salvar' : 'Criar' }}</button>
+      <button class="submit">{{ item ? 'Atualizar' : 'Adicionar' }}</button>
     </form>
   </dialog>
 </template>
