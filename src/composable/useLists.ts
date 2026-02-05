@@ -1,4 +1,4 @@
-import { ref, watch, computed } from "vue"
+import { ref, computed } from "vue"
 import type { List } from "@/types/List"
 import type { ListItem } from "@/types/ListItem"
 import { listService } from "@/api/services/lists"

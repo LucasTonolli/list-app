@@ -1,17 +1,27 @@
 import type { SaveListDTO } from "@/types/SaveListDTO";
 import api from "@/api/api";
 import type { List } from "@/types/List";
+import type { ListResponse } from "@/types/ListResponseDTO";
 
 
 export const listService = {
   async getLists(): Promise<List[]> {
-    const { data } = await api.get<List[]>("/lists");
-    return data;
+    const { data } = await api.get<ListResponse>("/lists");
+
+    return data.lists.map(item => ({
+      id: item.uuid,
+      title: item.title,
+      itemsCount: item.items_count,
+      sharedWith: item.shared_with_count,
+      items: [],
+      createdAt: item.created_at,
+      updatedAt: item.updated_at
+    }));
   },
 
   async getById(id: string): Promise<List> {
     const { data } = await api.get<List>(`/lists/${id}`);
-    return data;
+    return data.lists;
   },
 
   async create(payload: SaveListDTO): Promise<List> {

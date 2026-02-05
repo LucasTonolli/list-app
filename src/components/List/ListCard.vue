@@ -18,7 +18,7 @@ const emit = defineEmits<{
     </div>
 
     <p class="meta">
-      {{ list.items.length }} itens
+      {{ list.itemsCount }} itens
     </p>
   </article>
 </template>

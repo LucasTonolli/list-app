@@ -23,7 +23,7 @@ const router = useRouter()
 //Composables init
 const { toast, showNotification } = useNotification()
 const { isAuthenticaded, ensureIdentity, loading: authLoading } = useAuth()
-const {lists, getListById, createList,updateList, removeList, fetchLists, isLoading: listsLoading} = useLists()
+const { lists, getListById, createList,updateList, removeList, fetchLists, isLoading: listsLoading} = useLists()
 
 //UI Refs
 const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
