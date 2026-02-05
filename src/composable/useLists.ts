@@ -1,8 +1,10 @@
 import { ref, watch, computed } from "vue"
 import type { List } from "@/types/List"
 import type { ListItem } from "@/types/ListItem"
+import { listService } from "@/api/services/lists"
 
 const lists = ref<List[]>([])
+const isLoading = ref(false)
 const STORAGE_KEY = 'lists'
 
 const mockLists: List[] =  [
@@ -82,7 +84,19 @@ const updateList = (id: string, newTitle: string) => {
 const removeList = (id: string) => {
   lists.value = lists.value.filter(list => list.id !== id)
 }
-const getLists = computed(() => lists.value)
+
+const fetchLists = async () => {
+  isLoading.value = true
+
+  try {
+    const response = await listService.getLists()
+    lists.value = response
+  } catch (error) {
+    console.error(error)
+  } finally {
+    isLoading.value = false
+  }
+}
 
 const getListById = (id: string) =>
   lists.value.find(list => list.id === id)
@@ -130,23 +144,12 @@ const removeItem = (listId: string, itemId: string) => {
   }
 }
 
-const init = () => {
-  if (lists.value.length) return
-
-  const stored = localStorage.getItem(STORAGE_KEY)
-  lists.value = stored ? JSON.parse(stored) : []
-}
-
-
 export function useLists() {
-  init()
-
-  watch(() => lists.value, value => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
-  }, { deep: true })
 
   return {
-    lists: getLists,
+    lists: computed(() => lists.value),
+    isLoading,
+    fetchLists,
     createList,
     updateList,
     removeList,

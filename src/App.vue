@@ -1,34 +1,40 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import MainFooter from './components/MainFooter.vue';
-import MainHeader from './components/MainHeader.vue';
-import { useLists } from './composable/useLists';
+import { ref, computed, onMounted } from 'vue';
 import type { List } from './types/List';
 import { useRoute, useRouter } from 'vue-router';
+
+
+//Components
+import MainFooter from './components/MainFooter.vue';
+import MainHeader from './components/MainHeader.vue';
 import ListSelector from './components/dialogs/ListSelector.vue';
 import SaveList from './components/dialogs/SaveList.vue';
 import SimpleToast from './components/notifications/SimpleToast.vue';
-import { useAuth } from './composable/useAuth';
+import LoadingOverlay from './components/LoadingOverlay.vue';
 
-const { isAuthenticaded, ensureIdentity } = useAuth()
+//Composables
+import { useLists } from './composable/useLists';
+import { useAuth } from './composable/useAuth';
+import { useNotification } from './composable/useNotification';
 
 const route = useRoute()
 const router = useRouter()
 
-router.beforeEach(() => {
-  if(!isAuthenticaded.value) {
-    ensureIdentity()
-  }
-})
+//Composables init
+const { toast, showNotification } = useNotification()
+const { isAuthenticaded, ensureIdentity, loading: authLoading } = useAuth()
+const {lists, getListById, createList,updateList, removeList, fetchLists, isLoading: listsLoading} = useLists()
 
-const {lists, getListById, createList,updateList, removeList} = useLists()
+//UI Refs
+const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
+const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
 
+//Computed State
+const isAppBusy = computed(() => authLoading.value || listsLoading.value);
 const listId = computed(() => String(route.params.id))
 const currentList = computed(() => getListById(listId.value))
 
-const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
 
-const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
 function openListSelect(): void {
   listSelect.value?.open()
 }
@@ -90,23 +96,19 @@ function handleEdit(id: string): void {
 
 }
 
-const toast = ref({
-  show: false,
-  message: '',
-  type: 'success' as 'success' | 'error' | 'warning' | 'info',
-})
 
-const showNotification = (
-  message: string,
-  type: 'success' | 'error' | 'warning' | 'info' = 'success',
-) => {
-  toast.value = {
-    show: true,
-    message,
-    type,
+onMounted(async () => {
+ try {
+    await ensureIdentity()
+
+    if (isAuthenticaded.value) {
+      await fetchLists()
+      console.log('Listas carregadas com sucesso:', lists.value)
+    }
+  } catch (error) {
+    showNotification('Falha ao inicializar aplicação:' + error, 'error')
   }
-
-}
+})
 </script>
 
 <template>
@@ -117,6 +119,7 @@ const showNotification = (
    />
 
   <main class="container">
+    <LoadingOverlay v-if="isAppBusy" message="Sincronizando dados..."/>
     <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @edit-item="handleEditItem" @create-list="openSaveList" />
   </main>
 
