@@ -8,10 +8,18 @@ import { useRoute, useRouter } from 'vue-router';
 import ListSelector from './components/dialogs/ListSelector.vue';
 import SaveList from './components/dialogs/SaveList.vue';
 import SimpleToast from './components/notifications/SimpleToast.vue';
+import { useAuth } from './composable/useAuth';
 
+const { isAuthenticaded, ensureIdentity } = useAuth()
 
 const route = useRoute()
 const router = useRouter()
+
+router.beforeEach(() => {
+  if(!isAuthenticaded.value) {
+    ensureIdentity()
+  }
+})
 
 const {lists, getListById, createList,updateList, removeList} = useLists()
 
