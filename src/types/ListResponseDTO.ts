@@ -1,7 +1,6 @@
 import type { ListItem } from "./ListItem";
 
 export interface ListResponse {
-  lists: Array<{
     uuid: string;
     title: string;
     items_count: number;
@@ -9,5 +8,4 @@ export interface ListResponse {
     shared_with_count: number;
     created_at: string;
     updated_at: string;
-  }>
 }

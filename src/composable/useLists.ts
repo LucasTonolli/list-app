@@ -98,8 +98,31 @@ const fetchLists = async () => {
   }
 }
 
-const getListById = (id: string) =>
-  lists.value.find(list => list.id === id)
+const getListById = (id: string) => {
+  return lists.value.find(list => list.id === id)
+}
+
+const fetchListById = async (id: string) => {
+  isLoading.value = true;
+  try {
+    const enrichedList = await listService.getById(id);
+    console.log('enrichedList', enrichedList)
+    const index = lists.value.findIndex(l => l.id === id);
+    if (index !== -1) {
+      // Atualiza a lista existente com os itens detalhados
+      lists.value[index] = enrichedList;
+    } else {
+      // Se por algum motivo a lista não estava no cache, adiciona
+      lists.value.push(enrichedList);
+    }
+  } catch (error) {
+    console.error("Erro ao buscar detalhes da lista", error);
+    throw error;
+  } finally {
+    isLoading.value = false;
+  }
+}
+
 
 const addItem = (listId: string, itemName: string, itemDescription: string|null) => {
   const list = lists.value.find(list => list.id === listId)
@@ -154,6 +177,7 @@ export function useLists() {
     updateList,
     removeList,
     getListById,
+    fetchListById,
     addItem,
     updateItem,
     toggleItem,

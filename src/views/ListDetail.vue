@@ -1,21 +1,32 @@
 <!-- List Detail -->
 
 <script setup lang="ts">
-import { useLists } from '@/composable/useLists';
 import { useRoute, useRouter } from 'vue-router';
+import { computed, ref, watch } from 'vue';
+
+//Composables
+import { useLists } from '@/composable/useLists';
+
+//Components
 import FloatingAddButton from '@/components/FloatingAddButton.vue';
 import SaveListItem from '@/components/dialogs/SaveListItem.vue';
-import { computed, ref, watch } from 'vue';
 import ListItemRow from '@/components/ListItem/ListItemRow.vue';
+
+//Types
 import type { ListItem } from '@/types/ListItem';
 
 
-const { getListById, toggleItem, removeItem, addItem, updateItem } = useLists()
+const { getListById, fetchListById, toggleItem, removeItem, addItem, updateItem } = useLists()
 const route = useRoute()
 const router = useRouter()
+
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
+console.log('Lista carregada com sucesso: 1', list.value)
+
+console.log('LISTID DETAIL OFF', listId.value)
+console.log('LIST DETAIL OFF', list.value)
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 const emit = defineEmits<{
   (e: 'toggle-item', isChecked: boolean): void
@@ -52,13 +63,19 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
   }
 }
 
+async function loadData() {
+  try {
+    await fetchListById(listId.value);
+    console.log('Lista carregada com sucesso:', list.value)
+  } catch (error) {
+    console.error(error)
+    router.replace({ name: 'not-found' });
+  }
+}
+
 watch(
-  list,
-  (value) => {
-    if (!value) {
-      router.replace({ name: 'not-found' })
-    }
-  },
+  listId,
+  () =>  loadData(),
   { immediate: true }
 )
 
