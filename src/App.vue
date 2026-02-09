@@ -11,11 +11,15 @@ import ListSelector from './components/dialogs/ListSelector.vue';
 import SaveList from './components/dialogs/SaveList.vue';
 import SimpleToast from './components/notifications/SimpleToast.vue';
 import LoadingOverlay from './components/LoadingOverlay.vue';
+import ShareList from './components/dialogs/ShareList.vue';
 
 //Composables
 import { useLists } from './composable/useLists';
 import { useAuth } from './composable/useAuth';
 import { useNotification } from './composable/useNotification';
+import { invitationService } from './api/services/invitations';
+import CopyInvitation from './components/dialogs/CopyInvitation.vue';
+
 
 const route = useRoute()
 const router = useRouter()
@@ -28,7 +32,8 @@ const { lists, getListById, createList,updateList, removeList, fetchLists, isLoa
 //UI Refs
 const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
 const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
-
+const shareListDialog = ref<InstanceType<typeof ShareList> | null>(null)
+const invitationDialog = ref<InstanceType<typeof CopyInvitation> | null>(null)
 //Computed State
 const isAppBusy = computed(() => authLoading.value || listsLoading.value);
 const listId = computed(() => String(route.params.id))
@@ -41,6 +46,18 @@ function openListSelect(): void {
 
 function openSaveList(): void {
   saveListDialog.value?.open()
+}
+
+function openShareList(): void {
+  shareListDialog.value?.open()
+}
+
+function closeShareList(): void {
+  shareListDialog.value?.close()
+}
+
+function openInvitation(link: string): void {
+  invitationDialog.value?.open(link)
 }
 
 function handleSelectList(list: List): void {
@@ -96,6 +113,14 @@ function handleEdit(id: string): void {
 
 }
 
+async function handleShareList(quantity: number) {
+  const response = await invitationService.create(listId.value, quantity)
+
+  closeShareList()
+  showNotification('Convite criado com sucesso', 'success')
+  openInvitation(response.share_url)
+}
+
 
 onMounted(async () => {
  try {
@@ -116,6 +141,7 @@ onMounted(async () => {
     :current-list="currentList"
     @select-list="openListSelect"
     @create-list="openSaveList"
+    @share-list="openShareList"
    />
 
   <main class="container">
@@ -134,6 +160,8 @@ onMounted(async () => {
     @edit="handleEdit($event)"
   />
   <SaveList ref="saveListDialog" @save="handleSaveList" />
+  <ShareList ref="shareListDialog" @share-list="handleShareList($event)"/>
+  <CopyInvitation ref="invitationDialog" />
   <SimpleToast  v-if="toast.show"
       :message="toast.message"
       :type="toast.type"

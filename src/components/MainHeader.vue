@@ -8,6 +8,7 @@ defineProps<{
 const emit = defineEmits<{
   (e: 'select-list'): void
   (e: 'create-list'): void
+  (e: 'share-list'): void
 }>()
 </script>
 
@@ -19,9 +20,14 @@ const emit = defineEmits<{
       <i class="ri-arrow-down-s-line"></i>
     </button>
 
-    <button type="button" class="icon-btn primary" @click="emit('create-list')"  aria-label="Criar nova lista">
-      <i class="ri-add-line"></i>
-    </button>
+    <div class="actions">
+      <button type="button" class="icon-btn primary" @click="emit('share-list')" aria-label="Compartilhar lista">
+        <i class="ri-user-add-line"></i>
+      </button>
+      <button type="button" class="icon-btn primary" @click="emit('create-list')"  aria-label="Criar nova lista">
+        <i class="ri-add-line"></i>
+      </button>
+    </div>
   </header>
 </template>
 
@@ -49,5 +55,13 @@ const emit = defineEmits<{
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.actions{
+  display: flex;
+  gap: var(--space-sm);
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 </style>
