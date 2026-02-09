@@ -13,7 +13,7 @@ export const itemService = {
     return this.transform(data);
   },
 
-  async  updateItem(listId: string, itemId: string, payload: ListItem): Promise<ListItem> {
+  async  updateItem(listId: string, itemId: string, payload: { name: string; description: string | null , version: number}): Promise<ListItem> {
     const { data } = await api.put<ListItemResponse>(`/lists/${listId}/items/${itemId}`, payload);
     return this.transform(data);
   },

@@ -136,19 +136,24 @@ const addItem = async (listId: string, itemName: string, itemDescription: string
   }
 }
 
-const updateItem = (listId: string, itemId: string, name: string, description: string|null) => {
+const updateItem = async (listId: string, itemId: string, name: string, description: string|null) => {
   const list = lists.value.find(list => list.id === listId)
 
   if(!list) return
 
-  const item = list.items.find(item => item.id === itemId)
+  const index = list.items.findIndex(item => item.id === itemId)
 
-  if(!item) return
+  if(index === -1) return
 
-  item.name = name
-  item.description = description
-  item.updatedAt = now()
+  const item = list.items[index]
+  const version = item.version
+  const updatedItem = await itemService.updateItem(listId, itemId, {
+    name,
+    description,
+    version
+  });
 
+  list.items.splice(index, 1, updatedItem)
 }
 
 const toggleItem = async (listId: string, itemId: string) => {
