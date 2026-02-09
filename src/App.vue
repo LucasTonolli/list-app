@@ -48,12 +48,12 @@ function handleSelectList(list: List): void {
   listSelect.value?.close()
 }
 
-function handleSaveList({ title, listId }: { title: string; listId: string | null }): void {
+async function handleSaveList({ title, listId }: { title: string; listId: string | null }): void {
   if (listId) {
     updateList(listId, title)
     showNotification('Lista atualizada com sucesso', 'success')
   } else {
-    const newList = createList(title)
+    const newList = await createList(title)
     router.push({ name: 'list', params: { id: newList.id } })
     showNotification('Lista criada com sucesso', 'success')
   }

@@ -59,16 +59,12 @@ const mockLists: List[] =  [
     }
 ]
 
-const now = () => new Date().toISOString()
+const createList = async (title: string): Promise<List> => {
+  const list: List = await listService.create({
+    title
+  });
 
-const createList = (title: string): List => {
-  const list: List = {
-    id: crypto.randomUUID(),
-    title,
-    items: [],
-    createdAt: now(),
-    updatedAt: now()
-  }
+  console.log(list)
   lists.value.push(list)
 
   return list
@@ -78,6 +74,10 @@ const updateList = (id: string, newTitle: string) => {
   const list = lists.value.find(l => l.id === id)
 
   if(!list) return;
+
+  listService.update(id, {
+    title: newTitle
+  })
 
   list.title = newTitle
 }

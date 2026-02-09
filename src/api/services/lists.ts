@@ -17,13 +17,13 @@ export const listService = {
   },
 
   async create(payload: SaveListDTO): Promise<List> {
-    const { data } = await api.post<List>("/lists", payload);
-    return data;
+    const { data } = await api.post("/lists", payload);
+    return this.transform(data);
   },
 
   async update(id: string, payload: SaveListDTO): Promise<List> {
-    const { data } = await api.patch<List>(`/lists/${id}`, payload);
-    return data;
+    const { data } = await api.patch(`/lists/${id}`, payload);
+    return this.transform(data);
   },
 
   async delete(id: string): Promise<void> {
@@ -31,15 +31,15 @@ export const listService = {
   },
 
   transform(response: ListResponse): List {
-
+    const list = response.list ?? response
     return {
-      id: response.uuid,
-      title: response.title,
-      itemsCount: response.items_count,
-      sharedWith: response.shared_with_count,
-      items: response.items ? response.items.map(item => (itemService.transform(item))) : [],
-      createdAt: response.created_at,
-      updatedAt: response.updated_at
+      id: list.uuid,
+      title: list.title,
+      itemsCount: list.items_count,
+      sharedWith: list.shared_with_count,
+      items: list.items && list.items?.length > 0 ? list.items.map(item => (itemService.transform(item))) : [],
+      createdAt: list.created_at,
+      updatedAt: list.updated_at
     };
   }
 }
