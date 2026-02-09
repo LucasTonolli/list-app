@@ -18,6 +18,11 @@ const router = createRouter({
       name: 'not-found',
       component: () => import('../views/NotFound.vue'),
     },
+    {
+      path: '/lists/:listId/invitations/:token',
+      name: 'invitation',
+      component: () => import('../views/AcceptInviteView.vue'),
+    }
   ],
 })
 

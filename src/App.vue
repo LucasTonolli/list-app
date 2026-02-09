@@ -115,10 +115,10 @@ function handleEdit(id: string): void {
 
 async function handleShareList(quantity: number) {
   const response = await invitationService.create(listId.value, quantity)
-
+  const url = window.location.origin + `/lists/${listId.value}/invitations/${response.token}`
   closeShareList()
   showNotification('Convite criado com sucesso', 'success')
-  openInvitation(response.share_url)
+  openInvitation(url)
 }
 
 
