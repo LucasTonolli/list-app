@@ -166,18 +166,15 @@ const toggleItem = async (listId: string, itemId: string) => {
   console.log(list.items[index])
   if (index !== -1) {
     try {
-      // 1. Chamada para a API
+
       const updatedItem = await itemService.toggleItem(listId, itemId)
       console.warn(updatedItem)
-      // 2. Atualização reativa: usando splice para garantir que o Vue detecte a mudança no array
+
       list.items.splice(index, 1, updatedItem)
 
-      // Opcional: Se você quiser apenas atualizar as propriedades do objeto existente:
-      // Object.assign(list.items[index], updatedItem)
 
     } catch (error) {
       console.error("Erro ao alternar status do item:", error)
-      // Aqui você poderia reverter o estado na UI se tivesse feito um update otimista
     }
   }
 
