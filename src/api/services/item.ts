@@ -9,7 +9,7 @@ export const itemService = {
   },
 
   async toggleItem(listId: string, itemId: string): Promise<ListItem> {
-    const { data } = await api.patch<ListItemResponse>(`/lists/${listId}/items/${itemId}`);
+    const { data } = await api.patch<ListItemResponse>(`/lists/${listId}/items/${itemId}/toggle`);
     return this.transform(data);
   },
 
@@ -23,18 +23,18 @@ export const itemService = {
   },
 
   transform(response: ListItemResponse): ListItem {
-
+    const item = response.item ?? response
     return {
-      id: response.uuid,
-      listId: response.list_uuid,
-      name: response.name,
-      description: response.description,
-      checked: response.completed,
-      version: response.version,
-      lockedAt: response.locked_at,
-      lockedBy: response.locked_by,
-      createdAt: response.created_at,
-      updatedAt: response.updated_at
+      id: item.uuid,
+      listId: item.list_uuid,
+      name: item.name,
+      description: item.description,
+      checked: item.completed,
+      version: item.version,
+      lockedAt: item.locked_at,
+      lockedBy: item.locked_by,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at
     };
   }
 }

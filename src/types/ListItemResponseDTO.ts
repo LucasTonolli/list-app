@@ -1,4 +1,5 @@
 export interface ListItemResponse {
+   item: {
     uuid: string;
     list_uuid: string;
     name: string;
@@ -9,4 +10,5 @@ export interface ListItemResponse {
     updated_at: string;
     locked_at: string | null;
     locked_by: string | null;
+  }
 }

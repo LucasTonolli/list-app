@@ -2,6 +2,7 @@ import { ref, computed } from "vue"
 import type { List } from "@/types/List"
 import type { ListItem } from "@/types/ListItem"
 import { listService } from "@/api/services/lists"
+import { itemService } from "@/api/services/item"
 
 const lists = ref<List[]>([])
 const isLoading = ref(false)
@@ -105,8 +106,8 @@ const getListById = (id: string) => {
 const fetchListById = async (id: string) => {
   isLoading.value = true;
   try {
+
     const enrichedList = await listService.getById(id);
-    console.log('enrichedList', enrichedList)
     const index = lists.value.findIndex(l => l.id === id);
     if (index !== -1) {
       // Atualiza a lista existente com os itens detalhados
@@ -154,9 +155,30 @@ const updateItem = (listId: string, itemId: string, name: string, description: s
 
 }
 
-const toggleItem = (listId: string, itemId: string) => {
-  const item = getListById(listId)?.items.find(i => i.id === itemId)
-  if (item) item.checked = !item.checked
+const toggleItem = async (listId: string, itemId: string) => {
+  const list = getListById(listId)
+  if(!list) return
+
+  const index = list.items.findIndex(l => l.id === itemId);
+  console.warn('Toggle item', listId, itemId)
+  console.log(index)
+  console.log(list.items[index])
+  if (index !== -1) {
+    try {
+      // 1. Chamada para a API
+      const updatedItem = await itemService.toggleItem(listId, itemId)
+      console.warn(updatedItem)
+      // 2. Atualização reativa: usando splice para garantir que o Vue detecte a mudança no array
+      list.items.splice(index, 1, updatedItem)
+
+      // Opcional: Se você quiser apenas atualizar as propriedades do objeto existente:
+      // Object.assign(list.items[index], updatedItem)
+
+    } catch (error) {
+      console.error("Erro ao alternar status do item:", error)
+      // Aqui você poderia reverter o estado na UI se tivesse feito um update otimista
+    }
+  }
 
 }
 

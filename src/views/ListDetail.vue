@@ -23,10 +23,7 @@ const router = useRouter()
 const listId = computed(() => String( route.params.id))
 const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
-console.log('Lista carregada com sucesso: 1', list.value)
 
-console.log('LISTID DETAIL OFF', listId.value)
-console.log('LIST DETAIL OFF', list.value)
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 const emit = defineEmits<{
   (e: 'toggle-item', isChecked: boolean): void
@@ -41,9 +38,10 @@ function openDialog(itemToEdit: ListItem|null): void {
   }
   dialog.value?.open()
 }
-function handleToggleItem(item: ListItem): void {
-  toggleItem(listId.value, item.id);
-  emit('toggle-item', item.checked)
+async function handleToggleItem(item: ListItem): Promise<void> {
+  await toggleItem(listId.value, item.id);
+  const updatedItem = list.value?.items.find(i => i.id === item.id)
+  emit('toggle-item', updatedItem.checked)
 }
 
 function handleRemoveItem(item: ListItem): void {
@@ -64,6 +62,7 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
 }
 
 async function loadData() {
+  if(list.value)
   try {
     await fetchListById(listId.value);
     console.log('Lista carregada com sucesso:', list.value)
