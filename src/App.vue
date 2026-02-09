@@ -50,7 +50,7 @@ function handleSelectList(list: List): void {
 
 async function handleSaveList({ title, listId }: { title: string; listId: string | null }): void {
   if (listId) {
-    updateList(listId, title)
+    await updateList(listId, title)
     showNotification('Lista atualizada com sucesso', 'success')
   } else {
     const newList = await createList(title)
@@ -59,8 +59,8 @@ async function handleSaveList({ title, listId }: { title: string; listId: string
   }
 }
 
-function handleRemoveList(id: string): void {
-  removeList(id)
+async function handleRemoveList(id: string): Promise<void> {
+  await removeList(id)
   if(id == listId.value) {
     router.push({ name: 'lists-index' })
   }

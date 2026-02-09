@@ -70,19 +70,20 @@ const createList = async (title: string): Promise<List> => {
   return list
 }
 
-const updateList = (id: string, newTitle: string) => {
+const updateList = async (id: string, newTitle: string) => {
   const list = lists.value.find(l => l.id === id)
 
   if(!list) return;
 
-  listService.update(id, {
+  await listService.update(id, {
     title: newTitle
   })
 
   list.title = newTitle
 }
 
-const removeList = (id: string) => {
+const removeList = async (id: string) => {
+  await listService.delete(id)
   lists.value = lists.value.filter(list => list.id !== id)
 }
 
