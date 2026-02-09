@@ -3,7 +3,7 @@ import type { ListItem } from "@/types/ListItem";
 import type { ListItemResponse } from "@/types/ListItemResponseDTO";
 
 export const itemService = {
-  async addItem(listId: string, payload: ListItem): Promise<ListItem> {
+  async addItem(listId: string, payload: { name: string; description: string | null }): Promise<ListItem> {
     const { data } = await api.post<ListItemResponse>(`/lists/${listId}/items`, payload);
     return this.transform(data);
   },

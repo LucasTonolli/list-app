@@ -125,17 +125,13 @@ const fetchListById = async (id: string) => {
 }
 
 
-const addItem = (listId: string, itemName: string, itemDescription: string|null) => {
+const addItem = async (listId: string, itemName: string, itemDescription: string|null) => {
   const list = lists.value.find(list => list.id === listId)
   if (list) {
-    const item: ListItem = {
-      id: crypto.randomUUID(),
+    const item: ListItem = await itemService.addItem(listId, {
       name: itemName,
-      description: itemDescription,
-      checked: false,
-      createdAt: now(),
-      updatedAt: now()
-    }
+      description: itemDescription
+    })
     list.items.push(item)
   }
 }
