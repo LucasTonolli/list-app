@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { invitationService } from '@/api/services/invitations';
 import { useNotification } from '@/composable/useNotification';
+import { AxiosError } from 'axios';
 
 const route = useRoute();
 const router = useRouter();
@@ -19,8 +20,14 @@ onMounted(async () => {
   try {
     const details = await invitationService.getInvitation(listId, token);
     listName.value = details.list_title;
-  } catch (e) {
-    showNotification('Convite inválido ou expirado', 'error');
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      console.error('Erro ao validar convite:',  e?.response?.data.message);
+      showNotification('Convite inválido ou expirado: ' + e?.response?.data.message , 'error');
+    } else {
+      console.error('Erro desconhecido ao validar convite:', e);
+      showNotification('Erro desconhecido ao validar convite', 'error');
+    }
     router.push('/');
   } finally {
     isValidating.value = false;
@@ -33,8 +40,12 @@ async function handleAccept() {
     await invitationService.accept(listId, token);
     showNotification('Agora você faz parte desta lista!', 'success');
     router.push({ name: 'list', params: { id: listId } });
-  } catch (e) {
-    showNotification('Erro ao aceitar: ' + e.response?.data.message, 'error');
+  } catch (e: unknown) {
+    if (e instanceof AxiosError) {
+      showNotification('Erro ao aceitar: ' + e.response?.data.message, 'error');
+    } else {
+      showNotification('Erro desconhecido ao aceitar convite', 'error');
+    }
   } finally {
     isAccepting.value = false;
   }
