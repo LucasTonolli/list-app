@@ -41,6 +41,9 @@ function openDialog(itemToEdit: ListItem|null): void {
 async function handleToggleItem(item: ListItem): Promise<void> {
   await toggleItem(listId.value, item.id);
   const updatedItem = list.value?.items.find(i => i.id === item.id)
+
+  if(!updatedItem) return
+
   emit('toggle-item', updatedItem.checked)
 }
 
