@@ -95,7 +95,7 @@ const updateItem = async (listId: string, itemId: string, name: string, descript
   if(index === -1) return
 
   const item = list.items[index]
-  const version = item.version
+  const version = item?.version || 1
   const updatedItem = await itemService.updateItem(listId, itemId, {
     name,
     description,

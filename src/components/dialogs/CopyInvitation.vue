@@ -11,7 +11,7 @@ const copied = ref(false)
 
  function open(LinkFromAction?: string, expiresAt?: Date) {
   internalLink.value = LinkFromAction || props.link  || '#'
-  expirationTime.value = expiresAt
+  expirationTime.value = expiresAt ?? null
   copied.value = false
   dialog.value?.showModal()
 }
