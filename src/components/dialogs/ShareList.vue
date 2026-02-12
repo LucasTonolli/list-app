@@ -67,15 +67,6 @@ defineExpose({ open, close })
   animation: slideUp 0.25s ease;
 }
 
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .sheet-header {
   display: flex;
   align-items: center;

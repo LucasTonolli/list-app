@@ -99,15 +99,6 @@ defineExpose({ open, item })
   animation: slideUp 0.25s ease;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .header {
   display: flex;
   justify-content: space-between;

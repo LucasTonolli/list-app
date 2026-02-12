@@ -187,3 +187,15 @@ input:focus, textarea:focus {
 .btn.danger:active {
   background: #b91c1c;
 }
+
+/* =========================
+   DIALOG ANIMATION
+========================= */
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

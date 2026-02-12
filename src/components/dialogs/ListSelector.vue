@@ -142,15 +142,6 @@ hr {
   max-height: 70dvh;
 }
 
-@keyframes slideUp {
-  from {
-    transform: translateY(100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 .header {
   display: flex;
   justify-content: space-between;
