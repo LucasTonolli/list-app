@@ -30,13 +30,13 @@ defineExpose({ open, close })
         </button>
       </header>
 
-      <div class="field">
-        <input type="number" v-model="quantity" name="" id="use-quantity" inputmode="numeric" placeholder="Quantas pessoas podem acessar?">
+      <div>
+        <input class="field" type="number" v-model="quantity" name="" id="use-quantity" inputmode="numeric" placeholder="Quantas pessoas podem acessar?">
       </div>
 
       <footer class="sheet-actions">
 
-        <button type="submit" class="btn primary">
+        <button type="submit" class="btn btn-full primary">
           Criar link de acesso
         </button>
       </footer>
@@ -44,71 +44,3 @@ defineExpose({ open, close })
   </dialog>
 </template>
 
-<style scoped>
-.dialog {
-  padding: 0;
-  border: none;
-  width: 100%;
-  max-width: none;
-  background: transparent;
-}
-
-.dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.sheet {
- position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: var(--color-bg);
-  border-radius: 16px 16px 0 0;
-  padding: var(--space-md);
-  animation: slideUp 0.25s ease;
-}
-
-.sheet-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-md);
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
-
-.field input {
-  padding: var(--space-sm);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-}
-
-.sheet-actions {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: flex-end;
-  margin-top: var(--space-md);
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-}
-
-.btn {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  border: none;
-  width: 100%;
-}
-
-.btn.primary {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-</style>

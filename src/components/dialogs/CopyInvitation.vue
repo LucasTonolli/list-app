@@ -46,18 +46,17 @@ defineExpose({ open })
         </button>
       </header>
 
-      <div class="field">
-        <div class="expiration-time">
-          <i class="ri-timer-2-line"></i> Expiração: {{ expirationTime ? expirationTime.toLocaleString() : 'Nunca' }}
-        </div>
-       <div class="link-display">
-          <code>{{ internalLink }}</code>
-        </div>
+
+      <div class="expiration-time">
+        <i class="ri-timer-2-line"></i> Expiração: {{ expirationTime ? expirationTime.toLocaleString() : 'Nunca' }}
+      </div>
+      <div class="link-display">
+        <code>{{ internalLink }}</code>
       </div>
 
-      <footer class="sheet-actions">
 
-        <button type="button" class="btn primary" @click="copyLink">
+      <footer class="sheet-actions">
+        <button type="button" class="btn primary btn-full" @click="copyLink">
           <span v-if="!copied">Copiar link <i class="ri-file-copy-line"></i></span>
           <span v-else>Link copiado <i class="ri-check-line"></i></span>
         </button>
@@ -67,40 +66,6 @@ defineExpose({ open })
 </template>
 
 <style scoped>
-.dialog {
-  padding: 0;
-  border: none;
-  width: 100%;
-  max-width: none;
-  background: transparent;
-}
-
-.dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.sheet {
- position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: var(--color-bg);
-  border-radius: 16px 16px 0 0;
-  padding: var(--space-md);
-  animation: slideUp 0.25s ease;
-}
-
-.sheet-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--space-md);
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-}
 
 .expiration-time {
   display: flex;
@@ -111,7 +76,7 @@ defineExpose({ open })
   background: var(--color-bg-alt, #f8f9fa);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
-  width: fit-content;
+  width: 100%;
   border: 1px solid var(--color-border-light, #eee);
   margin-bottom: var(--space-xs);
 }
@@ -126,30 +91,4 @@ defineExpose({ open })
 }
 
 code { font-family: monospace; color: var(--color-primary); }
-
-.sheet-actions {
-  display: flex;
-  gap: var(--space-sm);
-  justify-content: flex-end;
-  margin-top: var(--space-md);
-}
-
-.icon-btn {
-  background: none;
-  border: none;
-  font-size: 1.25rem;
-}
-
-.btn {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
-  border: none;
-  width: 100%;
-}
-
-.btn.primary {
-  background: var(--color-primary);
-  color: #fff;
-}
-
 </style>

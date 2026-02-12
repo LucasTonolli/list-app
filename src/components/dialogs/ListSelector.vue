@@ -119,35 +119,6 @@ hr {
   border-top: 1px solid var(--color-border);
   margin: var(--space-sm) 0;
 }
-.dialog {
-  padding: 0;
-  border: none;
-  width: 100%;
-  max-width: 100%;
-  background: transparent;
-}
-
-.dialog::backdrop {
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.sheet {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: var(--color-bg);
-  border-radius: 16px 16px 0 0;
-  padding: var(--space-md);
-  animation: slideUp 0.25s ease;
-  max-height: 70dvh;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--space-sm);
-}
 
 .list {
   list-style: none;
