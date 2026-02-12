@@ -6,65 +6,13 @@ import { itemService } from "@/api/services/item"
 
 const lists = ref<List[]>([])
 const isLoading = ref(false)
-const STORAGE_KEY = 'lists'
 
-const mockLists: List[] =  [
-    {
-      id: '1',
-      title: 'List 1',
-      items: [
-        {
-          id: '1',
-          name: 'Item 1',
-          description: null,
-          checked: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01'
-        }
-      ],
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01'
-    },
-    {
-      id: '2',
-      title: 'List 2',
-      items: [
-        {
-          id:' 2',
-          name: 'Item 2',
-          description: null,
-          checked: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01'
-        }
-      ],
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01'
-    },
-    {
-      id: '3',
-      title: 'List 3',
-      items: [
-        {
-          id: '3',
-          name: 'Item 3',
-          description: null,
-          checked: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01'
-        }
-      ],
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01'
-    }
-]
 
 const createList = async (title: string): Promise<List> => {
   const list: List = await listService.create({
     title
   });
 
-  console.log(list)
   lists.value.push(list)
 
   return list
@@ -162,17 +110,12 @@ const toggleItem = async (listId: string, itemId: string) => {
   if(!list) return
 
   const index = list.items.findIndex(l => l.id === itemId);
-  console.warn('Toggle item', listId, itemId)
-  console.log(index)
-  console.log(list.items[index])
+
   if (index !== -1) {
     try {
-
       const updatedItem = await itemService.toggleItem(listId, itemId)
-      console.warn(updatedItem)
 
       list.items.splice(index, 1, updatedItem)
-
 
     } catch (error) {
       console.error("Erro ao alternar status do item:", error)

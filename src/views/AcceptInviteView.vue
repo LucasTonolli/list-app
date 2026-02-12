@@ -13,12 +13,11 @@ const token = String(route.params.token);
 const listName = ref('');
 const isValidating = ref(true);
 const isAccepting = ref(false);
-console.log(route.params);
+
 
 onMounted(async () => {
   try {
     const details = await invitationService.getInvitation(listId, token);
-    console.log('Details', details);
     listName.value = details.list_title;
   } catch (e) {
     showNotification('Convite inválido ou expirado', 'error');

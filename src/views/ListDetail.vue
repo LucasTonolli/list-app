@@ -67,7 +67,6 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
 async function loadData() {
   try {
     await fetchListById(listId.value);
-    console.log('Lista carregada com sucesso:', list.value)
   } catch (error) {
     console.error(error)
     router.replace({ name: 'not-found' });

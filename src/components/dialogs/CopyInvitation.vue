@@ -10,7 +10,6 @@ const expirationTime = ref<Date | null>(null)
 const copied = ref(false)
 
  function open(LinkFromAction?: string, expiresAt?: Date) {
-  console.log(expiresAt);
   internalLink.value = LinkFromAction || props.link  || '#'
   expirationTime.value = expiresAt
   copied.value = false

@@ -129,7 +129,6 @@ onMounted(async () => {
 
     if (isAuthenticaded.value) {
       await fetchLists()
-      console.log('Listas carregadas com sucesso:', lists.value)
     }
   } catch (error) {
     showNotification('Falha ao inicializar aplicação:' + error, 'error')
