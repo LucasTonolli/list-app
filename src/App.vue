@@ -26,7 +26,7 @@ const router = useRouter()
 
 //Composables init
 const { toast, showNotification } = useNotification()
-const { isAuthenticaded, ensureIdentity, loading: authLoading } = useAuth()
+const { isAuthenticated, ensureIdentity, loading: authLoading } = useAuth()
 const { lists, getListById, createList,updateList, removeList, fetchLists, isLoading: listsLoading} = useLists()
 
 //UI Refs
@@ -127,7 +127,7 @@ onMounted(async () => {
  try {
     await ensureIdentity()
 
-    if (isAuthenticaded.value) {
+    if (isAuthenticated.value) {
       await fetchLists()
     }
   } catch (error) {

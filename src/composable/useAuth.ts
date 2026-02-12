@@ -5,10 +5,10 @@ const token = ref<string | null>(localStorage.getItem('token'));
 const loading = ref(false);
 
 export function useAuth() {
-  const isAuthenticaded = computed(() => !!token.value);
+  const isAuthenticated = computed(() => !!token.value);
 
   async function ensureIdentity() {
-    if (!isAuthenticaded.value) {
+    if (!isAuthenticated.value) {
       loading.value = true;
       try {
         const identity = await identityService.create();
@@ -24,7 +24,7 @@ export function useAuth() {
   return {
     token,
     loading,
-    isAuthenticaded,
+    isAuthenticated,
     ensureIdentity
   }
 }
