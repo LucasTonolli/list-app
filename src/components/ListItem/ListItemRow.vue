@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ListItem } from '@/types/ListItem'
+import { useNotification } from '@/composable/useNotification';
+import { useLists } from '@/composable/useLists';
 
 defineProps<{
   item: ListItem
 }>()
 
+const { toggleItem, getListById, removeItem } = useLists()
+const { showNotification } = useNotification()
+
 const emit = defineEmits<{
-  (e: 'toggle', id: string): void
-  (e: 'remove', id: string): void
   (e: 'edit', id: string): void
 }>()
 
@@ -16,6 +19,25 @@ const expanded = ref(false)
 
 function toggleExpand() {
   expanded.value = !expanded.value
+}
+
+async function handleToggle(item: ListItem): Promise<void> {
+  await toggleItem(item.listId, item.id);
+  const list = getListById(item.listId)
+  const updatedItem = list?.items.find(i => i.id === item.id)
+
+  if (!updatedItem) return
+
+  showNotification(
+    updatedItem.checked ? 'Item marcado como concluído' : 'Item marcado como pendente',
+    'info'
+  )
+}
+
+async function handleRemove(item: ListItem): Promise<void> {
+  await removeItem(item.listId, item.id)
+
+  showNotification('Item removido com sucesso', 'success')
 }
 </script>
 
@@ -25,9 +47,9 @@ function toggleExpand() {
       <button
         type="button"
         class="toggle"
-        @click="emit('toggle', item.id)"
+        @click="handleToggle(item)"
         :aria-pressed="item.checked"
-        aria-label="Marcar item como concluído"
+        :aria-label="item.checked ? 'Item concluido' : 'Item pendente'"
       >
         <i :class="item.checked ? 'ri-checkbox-circle-fill' : 'ri-checkbox-blank-circle-line'"></i>
       </button>
@@ -60,7 +82,7 @@ function toggleExpand() {
           type="button"
           class="icon-btn danger"
           aria-label="Remover item"
-          @click="emit('remove', item.id)"
+          @click="handleRemove(item)"
         >
           <i class="ri-delete-bin-line"></i>
         </button>

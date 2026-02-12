@@ -34,6 +34,7 @@ const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
 const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
 const shareListDialog = ref<InstanceType<typeof ShareList> | null>(null)
 const invitationDialog = ref<InstanceType<typeof CopyInvitation> | null>(null)
+
 //Computed State
 const isAppBusy = computed(() => authLoading.value || listsLoading.value);
 const listId = computed(() => String(route.params.id))
@@ -85,14 +86,6 @@ async function handleRemoveList(id: string): Promise<void> {
   showNotification('Lista removida com sucesso', 'success')
 }
 
-function handleRemoveItem(): void {
-  showNotification('Item removido com sucesso', 'success')
-}
-
-function handleToggleItem(isChecked: boolean): void {
-  const message = isChecked ? 'Item marcado como concluído' : 'Item desmarcado'
-  showNotification(message, 'success')
-}
 
 function handleCreateItem(): void {
   showNotification('Item adicionado com sucesso', 'success')
@@ -168,4 +161,3 @@ onMounted(async () => {
       @close="toast.show = false" />
 </template>
 
-<style scoped></style>

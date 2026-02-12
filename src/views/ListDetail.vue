@@ -16,7 +16,7 @@ import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 import type { ListItem } from '@/types/ListItem';
 
 
-const { getListById, fetchListById, toggleItem, removeItem, addItem, updateItem } = useLists()
+const { getListById, fetchListById, addItem, updateItem } = useLists()
 const route = useRoute()
 const router = useRouter()
 
@@ -26,8 +26,6 @@ const items = computed(() => list.value?.items ?? [])
 
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 const emit = defineEmits<{
-  (e: 'toggle-item', isChecked: boolean): void
-  (e: 'remove-item'): void
   (e: 'create-item'): void
   (e: 'edit-item'): void
 }>()
@@ -37,19 +35,6 @@ function openDialog(itemToEdit: ListItem|null): void {
     dialog.value!.item = itemToEdit
   }
   dialog.value?.open()
-}
-async function handleToggleItem(item: ListItem): Promise<void> {
-  await toggleItem(listId.value, item.id);
-  const updatedItem = list.value?.items.find(i => i.id === item.id)
-
-  if(!updatedItem) return
-
-  emit('toggle-item', updatedItem.checked)
-}
-
-function handleRemoveItem(item: ListItem): void {
-  removeItem(listId.value, item.id)
-  emit('remove-item')
 }
 
 function handleSaveItem(payload: { name: string, description: string | null }): void {
@@ -88,8 +73,6 @@ watch(
         v-for="item in items"
         :key="item.id"
         :item="item"
-        @toggle="handleToggleItem(item)"
-        @remove="handleRemoveItem(item)"
         @edit="openDialog(item)"
       />
     </div>
