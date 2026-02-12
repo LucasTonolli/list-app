@@ -65,7 +65,7 @@ function handleSelectList(list: List): void {
   listSelect.value?.close()
 }
 
-async function handleSaveList({ title, listId }: { title: string; listId: string | null }): void {
+async function handleSaveList({ title, listId }: { title: string; listId: string | null }): Promise<void> {
   if (listId) {
     await updateList(listId, title)
     showNotification('Lista atualizada com sucesso', 'success')
