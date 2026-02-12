@@ -1,7 +1,7 @@
 import api from "@/api/api";
 
 export const invitationService = {
-  async create(listId: string, useQuantity: number|null): Promise<{uuid: string, share_url: string, max_uses: number, token: string}> {
+  async create(listId: string, useQuantity: number|null): Promise<{uuid: string, share_url: string, max_uses: number, token: string, expires_at: string}> {
     const {data} = await api.post(`/lists/${listId}/invitations`, { max_uses: useQuantity });
 
     return data.invitation
