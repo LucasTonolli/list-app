@@ -13,6 +13,10 @@ export const invitationService = {
   },
 
   async accept(listsId: string, invitationId: string): Promise<void> {
-    await api.post(`/lists/${listsId}/invitations/${invitationId}/accept`);
+    await api.post(`/lists/${listsId}/invitations/${invitationId}/accept`).catch((e) => {
+      console.error('Erro ao aceitar convite', e);
+      throw e;
+    });
+
   }
 }

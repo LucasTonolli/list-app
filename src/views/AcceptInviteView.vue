@@ -12,7 +12,7 @@ const listId = String(route.params.listId);
 const token = String(route.params.token);
 const listName = ref('');
 const isValidating = ref(true);
-
+const isAccepting = ref(false);
 console.log(route.params);
 
 onMounted(async () => {
@@ -30,96 +30,132 @@ onMounted(async () => {
 
 async function handleAccept() {
   try {
+    isAccepting.value = true;
     await invitationService.accept(listId, token);
     showNotification('Agora você faz parte desta lista!', 'success');
     router.push({ name: 'list', params: { id: listId } });
   } catch (e) {
-    showNotification('Erro ao aceitar convite', 'error');
+    showNotification('Erro ao aceitar: ' + e.response?.data.message, 'error');
+  } finally {
+    isAccepting.value = false;
   }
 }
 </script>
 
 <template>
-  <div class="invite-container">
-    <div v-if="isValidating">Validando seu convite...</div>
-    <div v-else class="invite-card">
-      <h1>Você foi convidado!</h1>
-      <h2> {{ listName }}</h2>
-      <button class="btn primary" @click="handleAccept">Aceitar e Entrar</button>
-    </div>
+  <div class="invite-card">
+  <div class="icon-wrapper">
+    <i class="ri-user-add-line"></i>
   </div>
+
+  <h1>Você foi convidado!</h1>
+  <p class="subtitle">Seu amigo quer compartilhar uma lista com você</p>
+
+  <div class="list-badge">
+    {{ listName }}
+  </div>
+
+  <div class="actions">
+    <button class="btn primary" @click="handleAccept" :disabled="isAccepting">
+      Aceitar e Entrar
+    </button>
+    <button class="btn secondary" @click="router.push('/')">
+      Agora não
+    </button>
+  </div>
+
+  <footer class="footer-info">
+    © 2026 · List App
+  </footer>
+</div>
 </template>
 <style scoped>
 .invite-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 80vh; /* Aumentado para centralizar melhor visualmente */
   padding: var(--space-md);
+  background: linear-gradient(to bottom, transparent, var(--color-bg-alt, #f9f9f9));
 }
 
 .invite-card {
   background: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-lg);
+  border-radius: var(--radius-lg, 24px); /* Bordas mais arredondadas para um ar moderno */
+  padding: var(--space-xl, 40px);
   width: 100%;
-  max-width: 400px;
+  max-width: 420px;
   text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: var(--color-primary-light, #f0f7ff);
+  color: var(--color-primary);
+  border-radius: 50%;
+  margin-bottom: var(--space-md);
+  font-size: 2.5rem;
 }
 
 .invite-card h1 {
-  font-size: 1.5rem;
-  margin-bottom: var(--space-sm);
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: var(--space-xs);
   color: var(--color-text);
+  letter-spacing: -0.025em;
 }
 
-.invite-card strong {
+.subtitle {
+  color: var(--color-text-light);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-lg);
+}
+
+/* Badge estilizado para o nome da lista */
+.list-badge {
+  display: inline-block;
+  background: var(--color-primary-light, #f0f7ff);
   color: var(--color-primary);
-  display: block;
-  font-size: 1.2rem;
-  margin-top: var(--space-xs);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-pill, 100px);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin: var(--space-sm) 0 var(--space-xl);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.1);
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: var(--space-sm);
+  gap: var(--space-md);
 }
 
 .btn {
-  padding: var(--space-sm) var(--space-md);
-  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: var(--space-md);
+  border-radius: var(--radius-md, 12px);
   border: none;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
   width: 100%;
-  transition: opacity 0.2s;
+  transition: all 0.2s ease;
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn.primary {
-  background: var(--color-primary);
-  color: #fff;
-}
-
-.btn.secondary {
-  background: transparent;
+/* Ajuste para o Footer no card */
+.footer-info {
+  margin-top: var(--space-xl);
+  font-size: 0.8rem;
   color: var(--color-text-light);
-  border: 1px solid var(--color-border);
-}
-
-/* Loading state animation */
-.loading-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-md);
-  color: var(--color-text-light);
+  opacity: 0.7;
 }
 </style>

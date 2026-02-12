@@ -62,7 +62,6 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
 }
 
 async function loadData() {
-  if(list.value)
   try {
     await fetchListById(listId.value);
     console.log('Lista carregada com sucesso:', list.value)

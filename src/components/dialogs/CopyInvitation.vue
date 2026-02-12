@@ -6,10 +6,13 @@ import { ref} from 'vue'
 
 const dialog = ref<HTMLDialogElement | null>(null)
 const internalLink = ref('')
+const expirationTime = ref<Date | null>(null)
 const copied = ref(false)
 
- function open(LinkFromAction?: string) {
+ function open(LinkFromAction?: string, expiresAt?: Date) {
+  console.log(expiresAt);
   internalLink.value = LinkFromAction || props.link  || '#'
+  expirationTime.value = expiresAt
   copied.value = false
   dialog.value?.showModal()
 }
@@ -44,6 +47,9 @@ defineExpose({ open })
       </header>
 
       <div class="field">
+        <div class="expiration-time">
+          <i class="ri-timer-2-line"></i> Expiração: {{ expirationTime ? expirationTime.toLocaleString() : 'Nunca' }}
+        </div>
        <div class="link-display">
           <code>{{ internalLink }}</code>
         </div>
@@ -103,6 +109,20 @@ defineExpose({ open })
   display: flex;
   flex-direction: column;
   gap: var(--space-xs);
+}
+
+.expiration-time {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  background: var(--color-bg-alt, #f8f9fa);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  width: fit-content;
+  border: 1px solid var(--color-border-light, #eee);
+  margin-bottom: var(--space-xs);
 }
 
 .link-display {
