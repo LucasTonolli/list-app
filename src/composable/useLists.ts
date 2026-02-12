@@ -181,10 +181,10 @@ const toggleItem = async (listId: string, itemId: string) => {
 
 }
 
-const removeItem = (listId: string, itemId: string) => {
+const removeItem = async (listId: string, itemId: string) => {
   const list = lists.value.find(list => list.id === listId)
   if (list) {
-    itemService.deleteItem(listId, itemId)
+    await itemService.deleteItem(listId, itemId)
     list.items = list.items.filter(item => item.id !== itemId)
   }
 }
