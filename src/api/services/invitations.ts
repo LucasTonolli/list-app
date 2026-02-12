@@ -7,7 +7,7 @@ export const invitationService = {
     return data.invitation
   },
 
-  async getInvitation(listId: string, invitationId: string): Promise<void> {
+  async getInvitation(listId: string, invitationId: string): Promise<{uuid: string,list_title: string, share_url: string, max_uses: number, token: string}> {
     const {data} = await api.get(`/lists/${listId}/invitations/${invitationId}`);
     return data.invitation
   },
