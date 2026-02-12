@@ -71,7 +71,7 @@ const createList = async (title: string): Promise<List> => {
 }
 
 const updateList = async (id: string, newTitle: string) => {
-  const list = lists.value.find(l => l.id === id)
+  const list = getListById(id)
 
   if(!list) return;
 
@@ -127,7 +127,7 @@ const fetchListById = async (id: string) => {
 
 
 const addItem = async (listId: string, itemName: string, itemDescription: string|null) => {
-  const list = lists.value.find(list => list.id === listId)
+  const list = getListById(listId)
   if (list) {
     const item: ListItem = await itemService.addItem(listId, {
       name: itemName,
@@ -138,7 +138,7 @@ const addItem = async (listId: string, itemName: string, itemDescription: string
 }
 
 const updateItem = async (listId: string, itemId: string, name: string, description: string|null) => {
-  const list = lists.value.find(list => list.id === listId)
+  const list = getListById(listId)
 
   if(!list) return
 
@@ -182,7 +182,7 @@ const toggleItem = async (listId: string, itemId: string) => {
 }
 
 const removeItem = async (listId: string, itemId: string) => {
-  const list = lists.value.find(list => list.id === listId)
+  const list = getListById(listId)
   if (list) {
     await itemService.deleteItem(listId, itemId)
     list.items = list.items.filter(item => item.id !== itemId)
