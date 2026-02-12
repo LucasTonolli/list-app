@@ -1,10 +1,10 @@
-import type { ListItemResponse } from "./ListItemResponseDTO";
+import type { ListItemRaw } from "./ListItemRaw";
 
 export interface ListRaw {
   uuid: string;
   title: string;
   items_count: number;
-  items?: ListItemResponse[];
+  items?: ListItemRaw[];
   shared_with_count: number;
   created_at: string;
   updated_at: string;
