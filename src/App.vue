@@ -86,15 +86,6 @@ async function handleRemoveList(id: string): Promise<void> {
   showNotification('Lista removida com sucesso', 'success')
 }
 
-
-function handleCreateItem(): void {
-  showNotification('Item adicionado com sucesso', 'success')
-}
-
-function handleEditItem(): void {
-  showNotification('Item atualizado com sucesso', 'success')
-}
-
 function handleEdit(id: string): void {
   const listToEdit = getListById(id)
 
@@ -103,7 +94,6 @@ function handleEdit(id: string): void {
   listSelect.value?.close()
 
   saveListDialog.value?.openForEdit(listToEdit)
-
 }
 
 async function handleShareList(quantity: number) {
@@ -139,7 +129,7 @@ onMounted(async () => {
 
   <main class="container">
     <LoadingOverlay v-if="isAppBusy" message="Sincronizando dados..."/>
-    <RouterView @remove-item="handleRemoveItem" @toggle-item="handleToggleItem($event)" @create-item="handleCreateItem" @edit-item="handleEditItem" @create-list="openSaveList" />
+    <RouterView @create-list="openSaveList" />
   </main>
 
   <MainFooter />

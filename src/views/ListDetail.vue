@@ -14,8 +14,9 @@ import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 //Types
 import type { ListItem } from '@/types/ListItem';
+import { useNotification } from '@/composable/useNotification';
 
-
+const { showNotification } = useNotification()
 const { getListById, fetchListById, addItem, updateItem } = useLists()
 const route = useRoute()
 const router = useRouter()
@@ -25,10 +26,6 @@ const list = computed(() => getListById(listId.value))
 const items = computed(() => list.value?.items ?? [])
 
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
-const emit = defineEmits<{
-  (e: 'create-item'): void
-  (e: 'edit-item'): void
-}>()
 
 function openDialog(itemToEdit: ListItem|null): void {
   if(itemToEdit) {
@@ -42,10 +39,10 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
 
   if (itemToEdit) {
     updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
-    emit('edit-item')
+    showNotification('Item atualizado com sucesso', 'success');
   } else {
     addItem(listId.value, payload.name, payload.description)
-    emit('create-item')
+    showNotification('Item adicionado com sucesso', 'success');
   }
 }
 
