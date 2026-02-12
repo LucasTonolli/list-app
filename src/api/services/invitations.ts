@@ -40,6 +40,7 @@ export const invitationService = {
     return {
       uuid: raw.uuid,
       max_uses: raw.max_uses,
+      list_title: raw.list_title,
       created_at: raw.created_at,
       expires_at: raw.expires_at,
       accept_url: raw.accept_url
