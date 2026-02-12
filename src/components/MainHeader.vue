@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import type { List } from '@/types/List';
+import {  useRoute } from 'vue-router';
 
 defineProps<{
   currentList: List|undefined
@@ -10,6 +12,10 @@ const emit = defineEmits<{
   (e: 'create-list'): void
   (e: 'share-list'): void
 }>()
+
+const router = useRoute()
+
+const currentRouteName = computed(() => router.name);
 </script>
 
 
@@ -21,7 +27,7 @@ const emit = defineEmits<{
     </button>
 
     <div class="actions">
-      <button type="button" class="icon-btn primary" @click="emit('share-list')" aria-label="Compartilhar lista">
+      <button v-if="currentRouteName === 'list'" type="button" class="icon-btn primary" @click="emit('share-list')" aria-label="Compartilhar lista">
         <i class="ri-user-add-line"></i>
       </button>
       <button type="button" class="icon-btn primary" @click="emit('create-list')"  aria-label="Criar nova lista">
