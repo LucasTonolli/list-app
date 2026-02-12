@@ -3,16 +3,18 @@ import api from "@/api/api";
 import type { List } from "@/types/List";
 import type { ListResponse } from "@/types/ListResponseDTO";
 import { itemService } from "./item";
+import type { ListRaw } from "@/types/ListRaw";
+import type { ListsResponse } from "@/types/ListsResponse";
 
 
 export const listService = {
   async getLists(): Promise<List[]> {
-    const { data } = await api.get("/lists");
-    return data.lists.map(item => (this.transform(item)));
+    const { data } = await api.get<ListsResponse>("/lists");
+    return data.lists.map(list => (this.transform(list)));
   },
 
   async getById(id: string): Promise<List> {
-    const { data } = await api.get(`/lists/${id}`);
+    const { data } = await api.get<ListResponse>(`/lists/${id}`);
     return this.transform(data.list);
   },
 
@@ -30,8 +32,8 @@ export const listService = {
     await api.delete(`/lists/${id}`);
   },
 
-  transform(response: ListResponse): List {
-    const list = response.list ?? response
+  transform(raw: ListRaw): List {
+    const list = raw;
     return {
       id: list.uuid,
       title: list.title,
