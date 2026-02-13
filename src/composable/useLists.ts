@@ -14,7 +14,7 @@ const createList = async (title: string): Promise<List> => {
   });
 
   lists.value.push(list)
-
+  console.log("Lista criada:", list)
   return list
 }
 
