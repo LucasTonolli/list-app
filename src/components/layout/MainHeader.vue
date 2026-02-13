@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import type { List } from '@/types/List';
+import type { List } from '@/types/models/List';
 import {  useRoute } from 'vue-router';
 
 defineProps<{

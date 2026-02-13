@@ -1,4 +1,4 @@
-import type { ListItemRaw } from "./ListItemRaw";
+import type { ListItemRaw } from "../listItem/ListItemRaw";
 
 export interface ListRaw {
   uuid: string;
