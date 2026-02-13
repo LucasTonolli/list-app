@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { computed, ref, watch } from 'vue';
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
 //Composables
 import { useLists } from '@/composables/useLists';
@@ -27,6 +27,8 @@ const items = computed(() => list.value?.items ?? [])
 
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 
+let pollingInterval: number | undefined;
+
 function openDialog(itemToEdit: ListItem|null): void {
   if(itemToEdit) {
     dialog.value!.item = itemToEdit
@@ -49,10 +51,22 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
 async function loadData() {
   try {
     await fetchListById(listId.value);
-  } catch (error) {
-    console.error(error)
+  } catch (error: unknown) {
+    console.error('Erro ao buscar detalhes da lista', error);
     router.replace({ name: 'not-found' });
+  } finally {
+    // Só agenda a próxima busca DEPOIS que a atual terminou
+    scheduleNextPoll();
   }
+}
+
+function scheduleNextPoll() {
+  // Limpa qualquer timer existente para evitar duplicatas
+  if (pollingInterval) clearTimeout(pollingInterval);
+
+  pollingInterval = setTimeout(() => {
+    loadData();
+  }, 10000);
 }
 
 watch(
@@ -60,6 +74,14 @@ watch(
   () =>  loadData(),
   { immediate: true }
 )
+
+onMounted(() => {
+  loadData(); // Primeira execução
+});
+
+onUnmounted(() => {
+  if (pollingInterval) clearTimeout(pollingInterval);
+});
 
 </script>
 
