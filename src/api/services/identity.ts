@@ -1,5 +1,5 @@
 import client from "@/api/client";
-import type { Identity } from "@/types/Identity";
+import type { Identity } from "@/types/models/Identity";
 
 export const identityService = {
   async create(): Promise<Identity> {

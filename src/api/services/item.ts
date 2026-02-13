@@ -1,7 +1,7 @@
 import client from "@/api/client";
-import type { ListItem } from "@/types/ListItem";
-import type { ListItemRaw } from "@/types/ListItemRaw";
-import type { ListItemResponse } from "@/types/ListItemResponseDTO";
+import type { ListItem } from "@/types/models/ListItem";
+import type { ListItemRaw } from "@/types/dtos/listItem/ListItemRaw";
+import type { ListItemResponse } from "@/types/dtos/listItem/ListItemResponseDTO";
 
 export const itemService = {
   async addItem(listId: string, payload: { name: string; description: string | null }): Promise<ListItem> {

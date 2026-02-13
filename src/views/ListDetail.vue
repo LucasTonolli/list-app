@@ -13,7 +13,7 @@ import SaveListItem from '@/components/dialogs/SaveListItem.vue';
 import ListItemRow from '@/components/lists/ListItemRow.vue';
 
 //Types
-import type { ListItem } from '@/types/ListItem';
+import type { ListItem } from '@/types/models/ListItem';
 import { useNotification } from '@/composables/useNotification';
 
 const { showNotification } = useNotification()

@@ -1,6 +1,6 @@
 import { ref, computed } from "vue"
-import type { List } from "@/types/List"
-import type { ListItem } from "@/types/ListItem"
+import type { List } from "@/types/models/List"
+import type { ListItem } from "@/types/models/ListItem"
 import { listService } from "@/api/services/lists"
 import { itemService } from "@/api/services/item"
 

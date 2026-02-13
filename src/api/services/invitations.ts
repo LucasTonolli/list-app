@@ -1,9 +1,9 @@
 import client from "@/api/client";
-import type { CreateInvitation } from "@/types/CreateInvitation";
-import type { CreateInvitationRaw } from "@/types/CreateInvitationRaw";
-import type { CreateInvitationResponse } from "@/types/CreateInvitationResponse";
-import type { GetInvitation } from "@/types/GetInvitation";
-import type { GetInvitationRaw } from "@/types/GetInvitationRaw";
+import type { CreateInvitation } from "@/types/models/CreateInvitation";
+import type { CreateInvitationRaw } from "@/types/dtos/invitation/CreateInvitationRaw";
+import type { CreateInvitationResponse } from "@/types/dtos/invitation/CreateInvitationResponse";
+import type { GetInvitation } from "@/types/models/GetInvitation";
+import type { GetInvitationRaw } from "@/types/dtos/invitation/GetInvitationRaw";
 
 
 export const invitationService = {

@@ -1,10 +1,10 @@
-import type { SaveListDTO } from "@/types/SaveListDTO";
+import type { SaveListDTO } from "@/types/dtos/list/SaveListDTO";
 import client from "@/api/client";
-import type { List } from "@/types/List";
-import type { ListResponse } from "@/types/ListResponseDTO";
+import type { List } from "@/types/models/List";
+import type { ListResponse } from "@/types/dtos/list/ListResponseDTO";
 import { itemService } from "./item";
-import type { ListRaw } from "@/types/ListRaw";
-import type { ListsResponse } from "@/types/ListsResponse";
+import type { ListRaw } from "@/types/dtos/list/ListRaw";
+import type { ListsResponse } from "@/types/dtos/list/ListsResponse";
 
 
 export const listService = {

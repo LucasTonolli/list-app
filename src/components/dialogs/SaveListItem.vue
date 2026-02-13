@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ListItem } from '@/types/ListItem';
+import type { ListItem } from '@/types/models/ListItem';
 import { reactive, ref} from 'vue'
 
 const dialog = ref<HTMLDialogElement | null>(null)

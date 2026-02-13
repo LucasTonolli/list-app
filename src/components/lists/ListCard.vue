@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { List } from '@/types/List'
+import type { List } from '@/types/models/List'
 
 defineProps<{
   list: List

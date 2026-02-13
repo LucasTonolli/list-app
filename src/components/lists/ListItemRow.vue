@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ListItem } from '@/types/ListItem'
+import type { ListItem } from '@/types/models/ListItem'
 import { useNotification } from '@/composables/useNotification';
 import { useLists } from '@/composables/useLists';
 
