@@ -8,9 +8,9 @@ import { computed, ref, watch } from 'vue';
 import { useLists } from '@/composables/useLists';
 
 //Components
-import FloatingAddButton from '@/components/FloatingAddButton.vue';
+import FloatingAddButton from '@/components/ui/FloatingAddButton.vue';
 import SaveListItem from '@/components/dialogs/SaveListItem.vue';
-import ListItemRow from '@/components/ListItem/ListItemRow.vue';
+import ListItemRow from '@/components/lists/ListItemRow.vue';
 
 //Types
 import type { ListItem } from '@/types/ListItem';

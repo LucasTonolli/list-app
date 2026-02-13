@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useLists } from '@/composables/useLists'
-import ListCard from '@/components/List/ListCard.vue'
+import ListCard from '@/components/lists/ListCard.vue'
 
 const router = useRouter()
 const { lists } = useLists()

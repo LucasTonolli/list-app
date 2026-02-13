@@ -5,12 +5,12 @@ import { useRoute, useRouter } from 'vue-router';
 
 
 //Components
-import MainFooter from './components/MainFooter.vue';
-import MainHeader from './components/MainHeader.vue';
+import MainFooter from './components/layout/MainFooter.vue';
+import MainHeader from './components/layout/MainHeader.vue';
 import ListSelector from './components/dialogs/ListSelector.vue';
 import SaveList from './components/dialogs/SaveList.vue';
-import SimpleToast from './components/notifications/SimpleToast.vue';
-import LoadingOverlay from './components/LoadingOverlay.vue';
+import SimpleToast from './components/ui/SimpleToast.vue';
+import LoadingOverlay from './components/ui/LoadingOverlay.vue';
 import ShareList from './components/dialogs/ShareList.vue';
 
 //Composables
