@@ -20,6 +20,7 @@ export const listService = {
 
   async create(payload: SaveListDTO): Promise<List> {
     const { data } = await api.post("/lists", payload);
+    console.log("Resposta da API:", data);
     return this.transform(data);
   },
 
