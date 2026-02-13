@@ -19,14 +19,13 @@ export const listService = {
   },
 
   async create(payload: SaveListDTO): Promise<List> {
-    const { data } = await api.post("/lists", payload);
-    console.log("Resposta da API:", data);
-    return this.transform(data);
+    const { data } = await api.post<ListResponse>("/lists", payload);
+    return this.transform(data.list);
   },
 
   async update(id: string, payload: SaveListDTO): Promise<List> {
-    const { data } = await api.patch(`/lists/${id}`, payload);
-    return this.transform(data);
+    const { data } = await api.patch<ListResponse>(`/lists/${id}`, payload);
+    return this.transform(data.list);
   },
 
   async delete(id: string): Promise<void> {
