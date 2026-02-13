@@ -19,6 +19,7 @@ import { useAuth } from './composables/useAuth';
 import { useNotification } from './composables/useNotification';
 import { invitationService } from './api/services/invitations';
 import CopyInvitation from './components/dialogs/CopyInvitation.vue';
+import { AxiosError } from 'axios';
 
 
 const route = useRoute()
@@ -97,12 +98,24 @@ function handleEdit(id: string): void {
 }
 
 async function handleShareList(quantity: number) {
-  const response = await invitationService.create(listId.value, quantity)
-  const url = import.meta.env.VITE_BASE_URL + `/lists/${listId.value}/invitations/${response.token}`
-  const expirationTime = new Date(response.expires_at)
-  closeShareList()
-  showNotification('Convite criado com sucesso', 'success')
-  openInvitation(url, expirationTime)
+  try {
+    const response = await invitationService.create(listId.value, quantity)
+    const url = import.meta.env.VITE_BASE_URL + `/lists/${listId.value}/invitations/${response.token}`
+    const expirationTime = new Date(response.expires_at)
+    closeShareList()
+    showNotification('Convite criado com sucesso', 'success')
+    openInvitation(url, expirationTime)
+  } catch (error) {
+    console.error('Erro ao criar convite', error)
+    if (error instanceof AxiosError) {
+       showNotification('Falha ao criar convite: ' + error?.response?.data.message, 'error')
+    } else {
+      showNotification('Falha ao criar convite: ' + String(error), 'error')
+    }
+
+    return
+  }
+
 }
 
 
