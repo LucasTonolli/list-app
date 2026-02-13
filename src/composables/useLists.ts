@@ -52,9 +52,7 @@ const getListById = (id: string) => {
 }
 
 const fetchListById = async (id: string) => {
-  isLoading.value = true;
   try {
-
     const enrichedList = await listService.getById(id);
     const index = lists.value.findIndex(l => l.id === id);
     if (index !== -1) {
@@ -67,8 +65,6 @@ const fetchListById = async (id: string) => {
   } catch (error) {
     console.error("Erro ao buscar detalhes da lista", error);
     throw error;
-  } finally {
-    isLoading.value = false;
   }
 }
 
