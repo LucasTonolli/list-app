@@ -2,7 +2,7 @@
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { invitationService } from '@/api/services/invitations';
-import { useNotification } from '@/composable/useNotification';
+import { useNotification } from '@/composables/useNotification';
 import { AxiosError } from 'axios';
 
 const route = useRoute();

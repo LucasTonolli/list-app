@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { computed, ref, watch } from 'vue';
 
 //Composables
-import { useLists } from '@/composable/useLists';
+import { useLists } from '@/composables/useLists';
 
 //Components
 import FloatingAddButton from '@/components/FloatingAddButton.vue';
@@ -14,7 +14,7 @@ import ListItemRow from '@/components/ListItem/ListItemRow.vue';
 
 //Types
 import type { ListItem } from '@/types/ListItem';
-import { useNotification } from '@/composable/useNotification';
+import { useNotification } from '@/composables/useNotification';
 
 const { showNotification } = useNotification()
 const { getListById, fetchListById, addItem, updateItem } = useLists()

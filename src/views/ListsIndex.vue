@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useLists } from '@/composable/useLists'
+import { useLists } from '@/composables/useLists'
 import ListCard from '@/components/List/ListCard.vue'
 
 const router = useRouter()

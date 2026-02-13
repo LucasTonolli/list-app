@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ListItem } from '@/types/ListItem'
-import { useNotification } from '@/composable/useNotification';
-import { useLists } from '@/composable/useLists';
+import { useNotification } from '@/composables/useNotification';
+import { useLists } from '@/composables/useLists';
 
 defineProps<{
   item: ListItem

@@ -14,9 +14,9 @@ import LoadingOverlay from './components/LoadingOverlay.vue';
 import ShareList from './components/dialogs/ShareList.vue';
 
 //Composables
-import { useLists } from './composable/useLists';
-import { useAuth } from './composable/useAuth';
-import { useNotification } from './composable/useNotification';
+import { useLists } from './composables/useLists';
+import { useAuth } from './composables/useAuth';
+import { useNotification } from './composables/useNotification';
 import { invitationService } from './api/services/invitations';
 import CopyInvitation from './components/dialogs/CopyInvitation.vue';
 
