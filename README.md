@@ -13,7 +13,7 @@ A collaborative list management app built with **Vue 3**, **TypeScript**, and th
 - Share lists via invitation links with configurable expiration
 - Accept invitations and collaborate on shared lists
 - Real-time sync with polling (10s intervals)
-- Anonymous authentication with JWT
+- Anonymous authentication with Tokens
 - Toast notifications for user feedback
 - Mobile-first responsive design
 - Dialog-based interactions
