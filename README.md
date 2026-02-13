@@ -1,6 +1,6 @@
 # Lists App
 
-[![Live Demo](https://img.shields.io/badge/Vercel-Live%20Demo-black?style=for-the-badge&logo=vercel)](https://list-app-beryl-iota.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Vercel-Live%20Demo-black?style=for-the-badge&logo=vercel)](https://list-app.lucas-tonolli.com.br/)
 
 A collaborative list management app built with **Vue 3**, **TypeScript**, and the **Composition API**. Create lists, add items, and share them with others via invitation links.
 
