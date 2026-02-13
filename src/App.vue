@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import type { List } from './types/List';
+import type { List } from './types/models/List';
 import { useRoute, useRouter } from 'vue-router';
 
 
