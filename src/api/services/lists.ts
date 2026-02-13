@@ -1,5 +1,5 @@
 import type { SaveListDTO } from "@/types/SaveListDTO";
-import api from "@/api/api";
+import client from "@/api/client";
 import type { List } from "@/types/List";
 import type { ListResponse } from "@/types/ListResponseDTO";
 import { itemService } from "./item";
@@ -9,27 +9,27 @@ import type { ListsResponse } from "@/types/ListsResponse";
 
 export const listService = {
   async getLists(): Promise<List[]> {
-    const { data } = await api.get<ListsResponse>("/lists");
+    const { data } = await client.get<ListsResponse>("/lists");
     return data.lists.map(list => (this.transform(list)));
   },
 
   async getById(id: string): Promise<List> {
-    const { data } = await api.get<ListResponse>(`/lists/${id}`);
+    const { data } = await client.get<ListResponse>(`/lists/${id}`);
     return this.transform(data.list);
   },
 
   async create(payload: SaveListDTO): Promise<List> {
-    const { data } = await api.post<ListResponse>("/lists", payload);
+    const { data } = await client.post<ListResponse>("/lists", payload);
     return this.transform(data.list);
   },
 
   async update(id: string, payload: SaveListDTO): Promise<List> {
-    const { data } = await api.patch<ListResponse>(`/lists/${id}`, payload);
+    const { data } = await client.patch<ListResponse>(`/lists/${id}`, payload);
     return this.transform(data.list);
   },
 
   async delete(id: string): Promise<void> {
-    await api.delete(`/lists/${id}`);
+    await client.delete(`/lists/${id}`);
   },
 
   transform(raw: ListRaw): List {

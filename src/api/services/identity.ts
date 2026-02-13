@@ -1,9 +1,9 @@
-import api from "@/api/api";
+import client from "@/api/client";
 import type { Identity } from "@/types/Identity";
 
 export const identityService = {
   async create(): Promise<Identity> {
-    const { data } = await api.post<Identity>("/identities");
+    const { data } = await client.post<Identity>("/identities");
     return data;
   }
 }

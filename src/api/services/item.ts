@@ -1,26 +1,26 @@
-import api from "@/api/api";
+import client from "@/api/client";
 import type { ListItem } from "@/types/ListItem";
 import type { ListItemRaw } from "@/types/ListItemRaw";
 import type { ListItemResponse } from "@/types/ListItemResponseDTO";
 
 export const itemService = {
   async addItem(listId: string, payload: { name: string; description: string | null }): Promise<ListItem> {
-    const { data } = await api.post<ListItemResponse>(`/lists/${listId}/items`, payload);
+    const { data } = await client.post<ListItemResponse>(`/lists/${listId}/items`, payload);
     return this.transform(data.item);
   },
 
   async toggleItem(listId: string, itemId: string): Promise<ListItem> {
-    const { data } = await api.patch<ListItemResponse>(`/lists/${listId}/items/${itemId}/toggle`);
+    const { data } = await client.patch<ListItemResponse>(`/lists/${listId}/items/${itemId}/toggle`);
     return this.transform(data.item);
   },
 
   async updateItem(listId: string, itemId: string, payload: { name: string; description: string | null , version: number}): Promise<ListItem> {
-    const { data } = await api.put<ListItemResponse>(`/lists/${listId}/items/${itemId}`, payload);
+    const { data } = await client.put<ListItemResponse>(`/lists/${listId}/items/${itemId}`, payload);
     return this.transform(data.item);
   },
 
   async deleteItem(listId: string, itemId: string): Promise<void> {
-    await api.delete(`/lists/${listId}/items/${itemId}`);
+    await client.delete(`/lists/${listId}/items/${itemId}`);
   },
 
   transform(raw: ListItemRaw): ListItem {

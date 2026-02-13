@@ -1,4 +1,4 @@
-import api from "@/api/api";
+import client from "@/api/client";
 import type { CreateInvitation } from "@/types/CreateInvitation";
 import type { CreateInvitationRaw } from "@/types/CreateInvitationRaw";
 import type { CreateInvitationResponse } from "@/types/CreateInvitationResponse";
@@ -8,17 +8,17 @@ import type { GetInvitationRaw } from "@/types/GetInvitationRaw";
 
 export const invitationService = {
   async create(listId: string, useQuantity: number|null): Promise<CreateInvitation> {
-    const {data} = await api.post<CreateInvitationResponse>(`/lists/${listId}/invitations`, { max_uses: useQuantity });
+    const {data} = await client.post<CreateInvitationResponse>(`/lists/${listId}/invitations`, { max_uses: useQuantity });
     return this.transformCreateInvitationRaw(data.invitation)
   },
 
   async getInvitation(listId: string, invitationId: string): Promise<GetInvitation> {
-    const {data} = await api.get<GetInvitationRaw>(`/lists/${listId}/invitations/${invitationId}`);
+    const {data} = await client.get<GetInvitationRaw>(`/lists/${listId}/invitations/${invitationId}`);
     return this.transformGetInvitationRaw(data);
   },
 
   async accept(listsId: string, invitationId: string): Promise<void> {
-    await api.post(`/lists/${listsId}/invitations/${invitationId}/accept`).catch((e) => {
+    await client.post(`/lists/${listsId}/invitations/${invitationId}/accept`).catch((e) => {
       console.error('Erro ao aceitar convite', e);
       throw e;
     });
