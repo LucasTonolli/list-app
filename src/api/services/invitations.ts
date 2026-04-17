@@ -7,8 +7,11 @@ import type { GetInvitationRaw } from "@/types/dtos/invitation/GetInvitationRaw"
 
 
 export const invitationService = {
-  async create(listId: string, useQuantity: number|null): Promise<CreateInvitation> {
-    const {data} = await client.post<CreateInvitationResponse>(`/lists/${listId}/invitations`, { max_uses: useQuantity });
+  async create(listId: string, useQuantity: number | null, expiresInMinutes: number): Promise<CreateInvitation> {
+    const {data} = await client.post<CreateInvitationResponse>(`/lists/${listId}/invitations`, {
+      max_uses: useQuantity,
+      expires_in_minutes: expiresInMinutes,
+    });
     return this.transformCreateInvitationRaw(data.invitation)
   },
 

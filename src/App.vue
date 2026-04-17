@@ -97,9 +97,9 @@ function handleEdit(id: string): void {
   saveListDialog.value?.openForEdit(listToEdit)
 }
 
-async function handleShareList(quantity: number) {
+async function handleShareList({ quantity, expiresInMinutes }: { quantity: number; expiresInMinutes: number }) {
   try {
-    const response = await invitationService.create(listId.value, quantity)
+    const response = await invitationService.create(listId.value, quantity, expiresInMinutes)
     const url = import.meta.env.VITE_BASE_URL + `/lists/${listId.value}/invitations/${response.token}`
     const expirationTime = new Date(response.expires_at)
     closeShareList()
