@@ -46,7 +46,7 @@ const isListDetail = computed(() => route.name === 'list')
   right: 0;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   padding: var(--space-sm) var(--space-md);
   padding-bottom: calc(var(--space-sm) + env(safe-area-inset-bottom));
   background: var(--color-bg);
@@ -55,12 +55,14 @@ const isListDetail = computed(() => route.name === 'list')
 }
 
 .nav-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   font-size: 0.7rem;
   color: var(--color-muted);
-  padding: var(--space-xs) var(--space-md);
+  padding: var(--space-xs) 0;
   border-radius: var(--radius-sm);
   transition: color 0.15s;
 }
