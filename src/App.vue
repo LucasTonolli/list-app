@@ -136,8 +136,6 @@ onMounted(async () => {
   <MainHeader
     :current-list="currentList"
     @select-list="openListSelect"
-    @create-list="openSaveList"
-    @share-list="openShareList"
    />
 
   <main class="container">
@@ -145,7 +143,10 @@ onMounted(async () => {
     <RouterView @create-list="openSaveList" />
   </main>
 
-  <MainFooter />
+  <MainFooter
+    @share-list="openShareList"
+    @create-list="openSaveList"
+  />
 
   <ListSelector
     ref="listSelect"

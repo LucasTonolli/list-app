@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { List } from '@/types/models/List';
-import {  useRoute } from 'vue-router';
 
 defineProps<{
   currentList: List|undefined
@@ -9,13 +7,7 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'select-list'): void
-  (e: 'create-list'): void
-  (e: 'share-list'): void
 }>()
-
-const router = useRoute()
-
-const currentRouteName = computed(() => router.name);
 </script>
 
 
@@ -25,15 +17,6 @@ const currentRouteName = computed(() => router.name);
       <span class="name">{{ currentList?.title ?? 'Selecionar lista' }}</span>
       <i class="ri-arrow-down-s-line"></i>
     </button>
-
-    <div class="actions">
-      <button v-if="currentRouteName === 'list'" type="button" class="icon-btn primary" @click="emit('share-list')" aria-label="Compartilhar lista">
-        <i class="ri-user-add-line"></i>
-      </button>
-      <button type="button" class="icon-btn primary" @click="emit('create-list')"  aria-label="Criar nova lista">
-        <i class="ri-add-line"></i>
-      </button>
-    </div>
   </header>
 </template>
 
@@ -63,11 +46,4 @@ const currentRouteName = computed(() => router.name);
   text-overflow: ellipsis;
 }
 
-.actions{
-  display: flex;
-  gap: var(--space-sm);
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-}
 </style>

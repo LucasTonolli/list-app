@@ -72,6 +72,7 @@ input:focus, textarea:focus {
 /* ===== UTILITIES ===== */
 .container {
   padding: var(--space-md);
+  padding-bottom: calc(var(--space-md) + 72px);
   max-width: 640px;
   margin: 0 auto;
 }
