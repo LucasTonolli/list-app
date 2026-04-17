@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { ref, nextTick } from 'vue'
+import { useLists } from '@/composables/useLists'
+import { useNotification } from '@/composables/useNotification'
+
+const props = defineProps<{ listId: string }>()
+
+const { bulkAddItems } = useLists()
+const { showNotification } = useNotification()
 
 const dialog = ref<HTMLDialogElement | null>(null)
 const input = ref<HTMLInputElement | null>(null)
 const inputValue = ref('')
 const tags = ref<string[]>([])
-
-const emit = defineEmits<{
-  (e: 'save', names: string[]): void
-}>()
+const loading = ref(false)
 
 function open(): void {
   tags.value = []
@@ -44,11 +48,21 @@ function handleKeydown(e: KeyboardEvent): void {
   }
 }
 
-function submit(): void {
+async function submit(): Promise<void> {
   addTag()
   if (tags.value.length === 0) return
-  emit('save', [...tags.value])
-  close()
+
+  loading.value = true
+  try {
+    await bulkAddItems(props.listId, tags.value.map(name => ({ name })))
+    const count = tags.value.length
+    showNotification(`${count} ${count === 1 ? 'item adicionado' : 'itens adicionados'} com sucesso`, 'success')
+    close()
+  } catch {
+    showNotification('Erro ao adicionar itens', 'error')
+  } finally {
+    loading.value = false
+  }
 }
 
 defineExpose({ open })
@@ -59,20 +73,16 @@ defineExpose({ open })
     <form method="dialog" class="sheet" @submit.prevent="submit">
       <header class="header">
         <h2>Adicionar vários itens</h2>
-        <button type="button" class="icon-btn" @click="close">
+        <button type="button" class="icon-btn" @click="close" :disabled="loading">
           <i class="ri-close-line"></i>
         </button>
       </header>
 
       <div>
         <div class="tag-input" @click="input?.focus()">
-          <span
-            v-for="(tag, i) in tags"
-            :key="i"
-            class="tag"
-          >
+          <span v-for="(tag, i) in tags" :key="i" class="tag">
             {{ tag }}
-            <button type="button" class="tag-remove" @click.stop="removeTag(i)" :aria-label="`Remover ${tag}`">
+            <button type="button" class="tag-remove" @click.stop="removeTag(i)" :aria-label="`Remover ${tag}`" :disabled="loading">
               <i class="ri-close-line"></i>
             </button>
           </span>
@@ -84,13 +94,17 @@ defineExpose({ open })
             placeholder="Digite e pressione Enter"
             @keydown="handleKeydown"
             @blur="addTag"
+            :disabled="loading"
           />
         </div>
         <p class="hint">Enter ou vírgula para adicionar · Backspace para remover</p>
       </div>
 
-      <button class="btn btn-full primary" :disabled="tags.length === 0 && !inputValue.trim()">
-        Adicionar {{ tags.length > 0 ? tags.length : '' }} {{ tags.length === 1 ? 'item' : tags.length > 1 ? 'itens' : 'itens' }}
+      <button class="btn btn-full primary" :disabled="loading || (tags.length === 0 && !inputValue.trim())">
+        <i v-if="loading" class="ri-loader-4-line spin"></i>
+        <template v-else>
+          Adicionar {{ tags.length > 0 ? tags.length : '' }} {{ tags.length === 1 ? 'item' : 'itens' }}
+        </template>
       </button>
     </form>
   </dialog>
@@ -155,5 +169,14 @@ defineExpose({ open })
   font-size: 0.75rem;
   color: var(--color-muted);
   margin: var(--space-xs) 0 0;
+}
+
+.spin {
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>

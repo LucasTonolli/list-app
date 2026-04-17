@@ -18,7 +18,7 @@ import type { ListItem } from '@/types/models/ListItem';
 import { useNotification } from '@/composables/useNotification';
 
 const { showNotification } = useNotification()
-const { getListById, fetchListById, addItem, bulkAddItems, updateItem } = useLists()
+const { getListById, fetchListById, addItem, updateItem } = useLists()
 const route = useRoute()
 const router = useRouter()
 
@@ -61,10 +61,6 @@ function handleSaveItem(payload: { name: string, description: string | null }): 
   }
 }
 
-async function handleBulkSave(names: string[]): Promise<void> {
-  bulkAddItems(listId.value, names.map(name => ({ name })))
-  showNotification(`${names.length} ${names.length === 1 ? 'item adicionado' : 'itens adicionados'} com sucesso`, 'success')
-}
 
 async function loadData() {
   try {
@@ -141,7 +137,7 @@ onUnmounted(() => {
     </div>
 
     <SaveListItem ref="dialog" :listId="listId" @save="handleSaveItem($event)"/>
-    <BulkAddItems ref="bulkDialog" @save="handleBulkSave($event)" />
+    <BulkAddItems ref="bulkDialog" :listId="listId" />
   </section>
 </template>
 
