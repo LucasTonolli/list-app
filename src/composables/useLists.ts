@@ -80,6 +80,14 @@ const addItem = async (listId: string, itemName: string, itemDescription: string
   }
 }
 
+const bulkAddItems = async (listId: string, items: { name: string }[]) => {
+  const list = getListById(listId)
+  if (list) {
+    const addedItems = await itemService.bulkAddItems(listId, { items })
+    list.items.push(...addedItems)
+  }
+}
+
 const updateItem = async (listId: string, itemId: string, name: string, description: string|null) => {
   const list = getListById(listId)
 
@@ -139,6 +147,7 @@ export function useLists() {
     getListById,
     fetchListById,
     addItem,
+    bulkAddItems,
     updateItem,
     toggleItem,
     removeItem

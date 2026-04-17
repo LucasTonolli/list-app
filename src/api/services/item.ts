@@ -2,11 +2,17 @@ import client from "@/api/client";
 import type { ListItem } from "@/types/models/ListItem";
 import type { ListItemRaw } from "@/types/dtos/listItem/ListItemRaw";
 import type { ListItemResponse } from "@/types/dtos/listItem/ListItemResponseDTO";
+import type { ListItemsResponse } from "@/types/dtos/listItem/ListItemsResponseDTO";
 
 export const itemService = {
   async addItem(listId: string, payload: { name: string; description: string | null }): Promise<ListItem> {
     const { data } = await client.post<ListItemResponse>(`/lists/${listId}/items`, payload);
     return this.transform(data.item);
+  },
+
+  async bulkAddItems(listId: string, payload: { items: { name: string }[] }): Promise<ListItem[]> {
+    const { data } = await client.post<ListItemsResponse>(`/lists/${listId}/items/bulk`, payload);
+    return data.items.map(raw => this.transform(raw));
   },
 
   async toggleItem(listId: string, itemId: string): Promise<ListItem> {

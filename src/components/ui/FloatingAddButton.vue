@@ -14,9 +14,6 @@
 
 <style scoped>
 .fab {
-  position: fixed;
-  bottom: 7rem;
-  right: 1.25rem;
   width: 56px;
   height: 56px;
   border-radius: 50%;
