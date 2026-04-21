@@ -40,11 +40,18 @@ function removeTag(index: number): void {
 }
 
 function handleKeydown(e: KeyboardEvent): void {
-  if (e.key === 'Enter' || e.key === ',') {
+  if (e.key === 'Enter') {
     e.preventDefault()
     addTag()
   } else if (e.key === 'Backspace' && inputValue.value === '' && tags.value.length > 0) {
     tags.value.pop()
+  }
+}
+
+function handleInput(): void {
+  if (inputValue.value.endsWith(',')) {
+    inputValue.value = inputValue.value.slice(0, -1)
+    addTag()
   }
 }
 
@@ -93,6 +100,7 @@ defineExpose({ open })
             v-model="inputValue"
             placeholder="Digite e pressione Enter"
             @keydown="handleKeydown"
+            @input="handleInput"
             @blur="addTag"
             :disabled="loading"
           />
