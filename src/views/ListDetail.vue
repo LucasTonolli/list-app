@@ -93,10 +93,6 @@ watch(
   { immediate: true }
 )
 
-onMounted(() => {
-  loadData(); // Primeira execução
-});
-
 onUnmounted(() => {
   if (pollingInterval) clearTimeout(pollingInterval);
 });
