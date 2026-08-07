@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { onMounted, computed, onUnmounted } from 'vue'
+import { onMounted, computed } from 'vue'
 
 type ToastType = 'success' | 'error' | 'warning' | 'info'
-let timer: number
 
 const props = withDefaults( defineProps<{
   message: string
@@ -30,14 +29,12 @@ const iconClass = computed(() => {
 onMounted(() => {
 
   const duration = props.type === 'error' ? 5000 : 3000
-  timer = setTimeout(() => {
+  setTimeout(() => {
     emit('close')
   }, duration)
 })
 
-onUnmounted(() => {
-  clearTimeout(timer)
-})
+
 </script>
 
 <template>

@@ -49,16 +49,20 @@ function openBulkDialog(): void {
   bulkDialog.value?.open()
 }
 
-function handleSaveItem(payload: { name: string, description: string | null }): void {
+async function handleSaveItem(payload: { name: string, description: string | null }): Promise<void> {
   const itemToEdit = dialog.value?.item
-
-  if (itemToEdit) {
-    updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
-    showNotification('Item atualizado com sucesso', 'success');
-  } else {
-    addItem(listId.value, payload.name, payload.description)
-    showNotification('Item adicionado com sucesso', 'success');
+  try{
+    if (itemToEdit) {
+      await updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
+      showNotification('Item atualizado com sucesso', 'success');
+    } else {
+      await addItem(listId.value, payload.name, payload.description)
+      showNotification('Item adicionado com sucesso', 'success');
+    }
+  } catch (error) {
+    showNotification('Erro ao adicionar item', 'error');
   }
+
 }
 
 
