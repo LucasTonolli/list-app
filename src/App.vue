@@ -19,7 +19,7 @@ import { useAuth } from './composables/useAuth';
 import { useNotification } from './composables/useNotification';
 import { invitationService } from './api/services/invitations';
 import CopyInvitation from './components/dialogs/CopyInvitation.vue';
-import { AxiosError } from 'axios';
+import { getApiErrorMessage } from './api/client.ts';
 
 
 const route = useRoute()
@@ -107,12 +107,8 @@ async function handleShareList({ quantity, expiresInMinutes }: { quantity: numbe
     openInvitation(url, expirationTime)
   } catch (error) {
     console.error('Erro ao criar convite', error)
-    if (error instanceof AxiosError) {
-       showNotification('Falha ao criar convite: ' + error?.response?.data.message, 'error')
-    } else {
-      showNotification('Falha ao criar convite: ' + String(error), 'error')
-    }
-
+    const message = getApiErrorMessage(error)
+    showNotification('Falha ao criar convite: ' + message, 'error')
     return
   }
 
