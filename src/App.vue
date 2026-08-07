@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, type DeepReadonly } from 'vue';
 import type { List } from './types/models/List';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -62,7 +62,7 @@ function openInvitation(link: string, expirationTime?: Date): void {
   invitationDialog.value?.open(link, expirationTime)
 }
 
-function handleSelectList(list: List): void {
+function handleSelectList(list: DeepReadonly<List>): void {
   router.push({ name: 'list', params: { id: list.id } })
   listSelect.value?.close()
 }

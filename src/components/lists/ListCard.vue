@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { List } from '@/types/models/List'
+import type { DeepReadonly } from 'vue';
 
 defineProps<{
-  list: List
+  list: DeepReadonly<List>
 }>()
 
 const emit = defineEmits<{
