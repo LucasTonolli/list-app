@@ -9,15 +9,10 @@ interface ToastState {
 }
 
 const toast = ref<ToastState>({ show: false, message: '', type: 'success' });
-
+let timeoutId: number | undefined
 const showNotification = (message: string, type: NotificationType = 'success') => {
-  toast.value.show = true;
-  toast.value.message = message;
-  toast.value.type = type;
-
-  setTimeout(() => {
-    toast.value.show = false;
-  }, 3000);
+  if(timeoutId) clearTimeout(timeoutId)
+  toast.value = { show: true, message, type };
 }
 
 export function useNotification() {
