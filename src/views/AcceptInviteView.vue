@@ -3,7 +3,7 @@ import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { invitationService } from '@/api/services/invitations';
 import { useNotification } from '@/composables/useNotification';
-import { AxiosError } from 'axios';
+import { getApiErrorMessage } from '@/api/client';
 
 const route = useRoute();
 const router = useRouter();
@@ -21,13 +21,8 @@ onMounted(async () => {
     const details = await invitationService.getInvitation(listId, token);
     listName.value = details.list_title;
   } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      console.error('Erro ao validar convite:',  e?.response?.data.message);
-      showNotification('Convite inválido ou expirado: ' + e?.response?.data.message , 'error');
-    } else {
-      console.error('Erro desconhecido ao validar convite:', e);
-      showNotification('Erro desconhecido ao validar convite', 'error');
-    }
+     const message = getApiErrorMessage(e);
+    showNotification('Convite inválido:' + message, 'error');
     router.push('/');
   } finally {
     isValidating.value = false;
