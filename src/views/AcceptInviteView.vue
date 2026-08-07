@@ -35,12 +35,10 @@ async function handleAccept() {
     await invitationService.accept(listId, token);
     showNotification('Agora você faz parte desta lista!', 'success');
     router.push({ name: 'list', params: { id: listId } });
-  } catch (e: unknown) {
-    if (e instanceof AxiosError) {
-      showNotification('Erro ao aceitar: ' + e.response?.data.message, 'error');
-    } else {
-      showNotification('Erro desconhecido ao aceitar convite', 'error');
-    }
+  } catch (e) {
+    const message = getApiErrorMessage(e);
+    showNotification('Falha ao aceitar convite: ' + message, 'error');
+
   } finally {
     isAccepting.value = false;
   }
