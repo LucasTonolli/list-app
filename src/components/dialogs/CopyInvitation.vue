@@ -30,7 +30,7 @@ async function copyLink() {
   }
 }
 
-defineExpose({ open })
+defineExpose({ open, close })
 
 </script>
 
