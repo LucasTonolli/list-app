@@ -42,6 +42,7 @@ const fetchLists = async () => {
     lists.value = response
   } catch (error) {
     console.error(error)
+    throw error
   } finally {
     isLoading.value = false
   }
@@ -122,6 +123,7 @@ const toggleItem = async (listId: string, itemId: string) => {
 
     } catch (error) {
       console.error("Erro ao alternar status do item:", error)
+      throw error
     }
   }
 

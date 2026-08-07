@@ -16,6 +16,7 @@ export function useAuth() {
         localStorage.setItem('token', identity.token);
       } catch (error) {
         console.error("Error creating identity", error);
+        throw error;
       } finally {
         loading.value = false;
       }
