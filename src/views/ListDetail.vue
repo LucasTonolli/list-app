@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 //Composables
 import { useLists } from '@/composables/useLists';
@@ -16,6 +16,8 @@ import ListItemRow from '@/components/lists/ListItemRow.vue';
 //Types
 import type { ListItem } from '@/types/models/ListItem';
 import { useNotification } from '@/composables/useNotification';
+import { getApiErrorMessage } from '@/api/client';
+import { AxiosError } from 'axios';
 
 const { showNotification } = useNotification()
 const { getListById, fetchListById, addItem, updateItem } = useLists()
@@ -69,12 +71,17 @@ async function handleSaveItem(payload: { name: string, description: string | nul
 async function loadData() {
   try {
     await fetchListById(listId.value);
-  } catch (error: unknown) {
-    console.error('Erro ao buscar detalhes da lista', error);
-    router.replace({ name: 'not-found' });
-  } finally {
-    // Só agenda a próxima busca DEPOIS que a atual terminou
     scheduleNextPoll();
+
+  } catch (error: unknown) {
+    if(error instanceof AxiosError && error.response?.status === 404) {
+      router.replace({ name: 'not-found' });
+      return;
+    } else{
+      const message = getApiErrorMessage(error);
+      showNotification('Erro ao buscar detalhes da lista:' + message, 'error');
+    }
+    console.error('Erro ao buscar detalhes da lista', error);
   }
 }
 
@@ -92,6 +99,7 @@ watch(
   () =>  loadData(),
   { immediate: true }
 )
+
 
 onUnmounted(() => {
   if (pollingInterval) clearTimeout(pollingInterval);
