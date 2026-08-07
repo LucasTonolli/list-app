@@ -1,4 +1,4 @@
-import { ref, computed } from "vue"
+import { ref, readonly } from "vue"
 import type { List } from "@/types/models/List"
 import type { ListItem } from "@/types/models/ListItem"
 import { listService } from "@/api/services/lists"
@@ -126,7 +126,7 @@ const removeItem = async (listId: string, itemId: string) => {
 export function useLists() {
 
   return {
-    lists: computed(() => lists.value),
+    lists: readonly(lists),
     isLoading,
     fetchLists,
     createList,
