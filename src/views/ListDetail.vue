@@ -51,14 +51,18 @@ function openBulkDialog(): void {
 
 async function handleSaveItem(payload: { name: string, description: string | null }): Promise<void> {
   const itemToEdit = dialog.value?.item
-
-  if (itemToEdit) {
-    await updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
-    showNotification('Item atualizado com sucesso', 'success');
-  } else {
-    await addItem(listId.value, payload.name, payload.description)
-    showNotification('Item adicionado com sucesso', 'success');
+  try{
+    if (itemToEdit) {
+      await updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
+      showNotification('Item atualizado com sucesso', 'success');
+    } else {
+      await addItem(listId.value, payload.name, payload.description)
+      showNotification('Item adicionado com sucesso', 'success');
+    }
+  } catch (error) {
+    showNotification('Erro ao adicionar item', 'error');
   }
+
 }
 
 
