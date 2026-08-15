@@ -6,6 +6,7 @@ import { computed, onUnmounted, ref, watch } from 'vue';
 
 //Composables
 import { useLists } from '@/composables/useLists';
+import { FAB_BUTTON_SIZE, useFabPosition } from '@/composables/useFabPosition';
 
 //Components
 import FloatingAddButton from '@/components/ui/FloatingAddButton.vue';
@@ -31,6 +32,12 @@ const items = computed(() => list.value?.items ?? [])
 const dialog = ref<InstanceType<typeof SaveListItem> | null>(null)
 const bulkDialog = ref<InstanceType<typeof BulkAddItems> | null>(null)
 const showMenu = ref(false)
+
+const { position: fabPosition } = useFabPosition()
+const fabOptionsStyle = computed(() => ({
+  right: `${window.innerWidth - fabPosition.value.x - FAB_BUTTON_SIZE}px`,
+  bottom: `${window.innerHeight - fabPosition.value.y + 12}px`,
+}))
 
 let pollingInterval: number | undefined;
 
@@ -130,22 +137,20 @@ onUnmounted(() => {
       <div v-if="showMenu" class="fab-backdrop" @click="showMenu = false" />
     </Transition>
 
-    <div class="fab-container">
-      <Transition name="slide-up">
-        <div v-if="showMenu" class="fab-options">
-          <button class="fab-option" @click="openBulkDialog">
-            <span class="fab-option-label">Vários itens</span>
-            <div class="fab-option-btn"><i class="ri-list-check-3"></i></div>
-          </button>
-          <button class="fab-option" @click="openSingleDialog">
-            <span class="fab-option-label">Um item</span>
-            <div class="fab-option-btn"><i class="ri-file-add-line"></i></div>
-          </button>
-        </div>
-      </Transition>
+    <Transition name="slide-up">
+      <div v-if="showMenu" class="fab-options" :style="fabOptionsStyle">
+        <button class="fab-option" @click="openBulkDialog">
+          <span class="fab-option-label">Vários itens</span>
+          <div class="fab-option-btn"><i class="ri-list-check-3"></i></div>
+        </button>
+        <button class="fab-option" @click="openSingleDialog">
+          <span class="fab-option-label">Um item</span>
+          <div class="fab-option-btn"><i class="ri-file-add-line"></i></div>
+        </button>
+      </div>
+    </Transition>
 
-      <FloatingAddButton @click="showMenu = !showMenu" />
-    </div>
+    <FloatingAddButton @click="showMenu = !showMenu" />
 
     <SaveListItem ref="dialog" :listId="listId" @save="handleSaveItem($event)"/>
     <BulkAddItems ref="bulkDialog" :listId="listId" />
@@ -165,23 +170,13 @@ onUnmounted(() => {
   z-index: 90;
 }
 
-.fab-container {
+.fab-options {
   position: fixed;
-  bottom: 7rem;
-  right: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: var(--space-sm);
   z-index: 95;
-}
-
-.fab-options {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--space-sm);
-  margin-bottom: var(--space-sm);
 }
 
 .fab-option {
