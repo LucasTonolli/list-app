@@ -9,17 +9,16 @@ const route = useRoute();
 const router = useRouter();
 const { showNotification } = useNotification();
 
-
 const listName = ref('');
 const isValidating = ref(true);
 const isAccepting = ref(false);
 
 
 async function loadInvitation() {
-  const listId = String(route.params.listId);
-  const token = String(route.params.token);
+  const currentListId = String(route.params.listId);
+  const currentToken = String(route.params.token);
   try {
-    const details = await invitationService.getInvitation(listId, token);
+    const details = await invitationService.getInvitation(currentListId, currentToken);
     listName.value = details.list_title;
   } catch (e: unknown) {
      const message = getApiErrorMessage(e);
@@ -28,17 +27,19 @@ async function loadInvitation() {
   } finally {
     isValidating.value = false;
   }
-};
+}
 
 watch(()=>
   route.params.token, loadInvitation, {immediate: true}
 )
 async function handleAccept() {
+  const currentListId = String(route.params.listId);
+  const currentToken = String(route.params.token);
   try {
     isAccepting.value = true;
-    await invitationService.accept(listId, token);
+    await invitationService.accept(currentListId, currentToken);
     showNotification('Agora você faz parte desta lista!', 'success');
-    router.push({ name: 'list', params: { id: listId } });
+    router.push({ name: 'list', params: { id: currentListId } });
   } catch (e) {
     const message = getApiErrorMessage(e);
     showNotification('Falha ao aceitar convite: ' + message, 'error');
