@@ -64,7 +64,8 @@ async function handleSaveItem(payload: { name: string, description: string | nul
       showNotification('Item adicionado com sucesso', 'success');
     }
   } catch (error) {
-    showNotification('Erro ao adicionar item', 'error');
+    showNotification(`Erro ao ${itemToEdit ? 'atualizar' : 'adicionar'} item: ${getApiErrorMessage(error)}`, 'error');
+
   }
 
 }
