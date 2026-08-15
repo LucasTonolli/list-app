@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { watch, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { invitationService } from '@/api/services/invitations';
 import { useNotification } from '@/composables/useNotification';
@@ -9,14 +9,15 @@ const route = useRoute();
 const router = useRouter();
 const { showNotification } = useNotification();
 
-const listId = String(route.params.listId);
-const token = String(route.params.token);
+
 const listName = ref('');
 const isValidating = ref(true);
 const isAccepting = ref(false);
 
 
-onMounted(async () => {
+async function loadInvitation() {
+  const listId = String(route.params.listId);
+  const token = String(route.params.token);
   try {
     const details = await invitationService.getInvitation(listId, token);
     listName.value = details.list_title;
@@ -27,8 +28,11 @@ onMounted(async () => {
   } finally {
     isValidating.value = false;
   }
-});
+};
 
+watch(()=>
+  route.params.token, loadInvitation, {immediate: true}
+)
 async function handleAccept() {
   try {
     isAccepting.value = true;
