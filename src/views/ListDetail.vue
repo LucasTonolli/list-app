@@ -36,9 +36,10 @@ let pollingInterval: number | undefined;
 
 function openDialog(itemToEdit: ListItem|null): void {
   if(itemToEdit) {
-    dialog.value!.item = itemToEdit
+    dialog.value!.openForEdit(itemToEdit)
+  } else {
+    dialog.value?.open()
   }
-  dialog.value?.open()
 }
 
 function openSingleDialog(): void {
@@ -52,7 +53,8 @@ function openBulkDialog(): void {
 }
 
 async function handleSaveItem(payload: { name: string, description: string | null }): Promise<void> {
-  const itemToEdit = dialog.value?.item
+  const itemToEdit = dialog.value?.getItem()
+
   try{
     if (itemToEdit) {
       await updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
