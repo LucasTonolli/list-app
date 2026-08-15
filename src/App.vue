@@ -49,23 +49,29 @@ function handleSelectList(list: DeepReadonly<List>): void {
 }
 
 async function handleSaveList({ title, listId }: { title: string; listId: string | null }): Promise<void> {
-  if (listId) {
-    await updateList(listId, title)
-    showNotification('Lista atualizada com sucesso', 'success')
-  } else {
-    const newList = await createList(title)
-    router.push({ name: 'list', params: { id: newList.id } })
-    showNotification('Lista criada com sucesso', 'success')
+  try {
+    if (listId) {
+      await updateList(listId, title)
+      showNotification('Lista atualizada com sucesso', 'success')
+    } else {
+      const newList = await createList(title)
+      router.push({ name: 'list', params: { id: newList.id } })
+      showNotification('Lista criada com sucesso', 'success')
+    }
+  } catch (error) {
+    showNotification('Erro ao salvar lista: ' + getApiErrorMessage(error), 'error')
   }
 }
 
 async function handleRemoveList(id: string): Promise<void> {
-  await removeList(id)
-  if(id == listId.value) {
-    router.push({ name: 'lists-index' })
+ try {
+    await removeList(id)
+    if (id == listId.value) router.push({ name: 'lists-index' })
+    dialogs.closeListSelect()
+    showNotification('Lista removida com sucesso', 'success')
+  } catch (error) {
+    showNotification('Erro ao remover lista: ' + getApiErrorMessage(error), 'error')
   }
-  dialogs.closeListSelect();
-  showNotification('Lista removida com sucesso', 'success')
 }
 
 function handleEdit(id: string): void {
