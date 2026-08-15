@@ -39,7 +39,7 @@ function openForEdit(listToEdit: List) {
 }
 
 
-defineExpose({ open, openForEdit })
+defineExpose({ open, openForEdit, close })
 </script>
 
 <template>

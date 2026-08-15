@@ -36,10 +36,11 @@ const removeList = async (id: string) => {
 
 const fetchLists = async () => {
   isLoading.value = true
-  const response = await listService.getLists()
-  lists.value = response
-
-  isLoading.value = false
+  try {
+    lists.value = await listService.getLists()
+  } finally {
+    isLoading.value = false
+  }
 }
 
 const getListById = (id: string) => {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, type DeepReadonly } from 'vue';
+import { computed, onMounted, type DeepReadonly } from 'vue';
 import type { List } from './types/models/List';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -12,13 +12,15 @@ import SaveList from './components/dialogs/SaveList.vue';
 import SimpleToast from './components/ui/SimpleToast.vue';
 import LoadingOverlay from './components/ui/LoadingOverlay.vue';
 import ShareList from './components/dialogs/ShareList.vue';
+import CopyInvitation from './components/dialogs/CopyInvitation.vue';
 
 //Composables
 import { useLists } from './composables/useLists';
 import { useAuth } from './composables/useAuth';
 import { useNotification } from './composables/useNotification';
+import { useAppDialogs } from './composables/useAppDialogs';
+
 import { invitationService } from './api/services/invitations';
-import CopyInvitation from './components/dialogs/CopyInvitation.vue';
 import { getApiErrorMessage } from './api/client.ts';
 
 
@@ -29,62 +31,47 @@ const router = useRouter()
 const { toast, showNotification } = useNotification()
 const { isAuthenticated, ensureIdentity, loading: authLoading } = useAuth()
 const { lists, getListById, createList,updateList, removeList, fetchLists, isLoading: listsLoading} = useLists()
-
-//UI Refs
-const listSelect = ref<InstanceType<typeof ListSelector> | null>(null)
-const saveListDialog = ref<InstanceType<typeof SaveList> | null>(null)
-const shareListDialog = ref<InstanceType<typeof ShareList> | null>(null)
-const invitationDialog = ref<InstanceType<typeof CopyInvitation> | null>(null)
-
+const dialogs = useAppDialogs();
+const {
+  listSelect,
+  saveListDialog,
+  shareListDialog,
+  invitationDialog,
+} = dialogs;
 //Computed State
 const isAppBusy = computed(() => authLoading.value || listsLoading.value);
 const listId = computed(() => String(route.params.id))
 const currentList = computed(() => getListById(listId.value))
 
-
-function openListSelect(): void {
-  listSelect.value?.open()
-}
-
-function openSaveList(): void {
-  saveListDialog.value?.open()
-}
-
-function openShareList(): void {
-  shareListDialog.value?.open()
-}
-
-function closeShareList(): void {
-  shareListDialog.value?.close()
-}
-
-function openInvitation(link: string, expirationTime?: Date): void {
-  invitationDialog.value?.open(link, expirationTime)
-}
-
 function handleSelectList(list: DeepReadonly<List>): void {
   router.push({ name: 'list', params: { id: list.id } })
-  listSelect.value?.close()
+  dialogs.closeListSelect();
 }
 
 async function handleSaveList({ title, listId }: { title: string; listId: string | null }): Promise<void> {
-  if (listId) {
-    await updateList(listId, title)
-    showNotification('Lista atualizada com sucesso', 'success')
-  } else {
-    const newList = await createList(title)
-    router.push({ name: 'list', params: { id: newList.id } })
-    showNotification('Lista criada com sucesso', 'success')
+  try {
+    if (listId) {
+      await updateList(listId, title)
+      showNotification('Lista atualizada com sucesso', 'success')
+    } else {
+      const newList = await createList(title)
+      router.push({ name: 'list', params: { id: newList.id } })
+      showNotification('Lista criada com sucesso', 'success')
+    }
+  } catch (error) {
+    showNotification('Erro ao salvar lista: ' + getApiErrorMessage(error), 'error')
   }
 }
 
 async function handleRemoveList(id: string): Promise<void> {
-  await removeList(id)
-  if(id == listId.value) {
-    router.push({ name: 'lists-index' })
+ try {
+    await removeList(id)
+    if (id == listId.value) router.push({ name: 'lists-index' })
+    dialogs.closeListSelect()
+    showNotification('Lista removida com sucesso', 'success')
+  } catch (error) {
+    showNotification('Erro ao remover lista: ' + getApiErrorMessage(error), 'error')
   }
-  listSelect.value?.close()
-  showNotification('Lista removida com sucesso', 'success')
 }
 
 function handleEdit(id: string): void {
@@ -92,9 +79,9 @@ function handleEdit(id: string): void {
 
   if(!listToEdit) return
 
-  listSelect.value?.close()
+  dialogs.closeListSelect();
 
-  saveListDialog.value?.openForEdit(listToEdit)
+  dialogs.openSaveListForEdit(listToEdit)
 }
 
 async function handleShareList({ quantity, expiresInMinutes }: { quantity: number; expiresInMinutes: number }) {
@@ -102,9 +89,9 @@ async function handleShareList({ quantity, expiresInMinutes }: { quantity: numbe
     const response = await invitationService.create(listId.value, quantity, expiresInMinutes)
     const url = import.meta.env.VITE_BASE_URL + `/lists/${listId.value}/invitations/${response.token}`
     const expirationTime = new Date(response.expires_at)
-    closeShareList()
+    dialogs.closeShareList()
     showNotification('Convite criado com sucesso', 'success')
-    openInvitation(url, expirationTime)
+    dialogs.openInvitation(url, expirationTime)
   } catch (error) {
     console.error('Erro ao criar convite', error)
     const message = getApiErrorMessage(error)
@@ -131,17 +118,17 @@ onMounted(async () => {
 <template>
   <MainHeader
     :current-list="currentList"
-    @select-list="openListSelect"
+    @select-list="dialogs.openListSelect"
    />
 
   <main class="container">
     <LoadingOverlay v-if="isAppBusy" message="Sincronizando dados..."/>
-    <RouterView @create-list="openSaveList" />
+    <RouterView @create-list="dialogs.openSaveList" />
   </main>
 
   <MainFooter
-    @share-list="openShareList"
-    @create-list="openSaveList"
+    @share-list="dialogs.openShareList"
+    @create-list="dialogs.openSaveList"
   />
 
   <ListSelector

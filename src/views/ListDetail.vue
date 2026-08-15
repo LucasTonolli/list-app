@@ -2,7 +2,7 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 
 //Composables
 import { useLists } from '@/composables/useLists';
@@ -16,6 +16,8 @@ import ListItemRow from '@/components/lists/ListItemRow.vue';
 //Types
 import type { ListItem } from '@/types/models/ListItem';
 import { useNotification } from '@/composables/useNotification';
+import { getApiErrorMessage } from '@/api/client';
+import { AxiosError } from 'axios';
 
 const { showNotification } = useNotification()
 const { getListById, fetchListById, addItem, updateItem } = useLists()
@@ -34,9 +36,10 @@ let pollingInterval: number | undefined;
 
 function openDialog(itemToEdit: ListItem|null): void {
   if(itemToEdit) {
-    dialog.value!.item = itemToEdit
+    dialog.value!.openForEdit(itemToEdit)
+  } else {
+    dialog.value?.open()
   }
-  dialog.value?.open()
 }
 
 function openSingleDialog(): void {
@@ -50,7 +53,8 @@ function openBulkDialog(): void {
 }
 
 async function handleSaveItem(payload: { name: string, description: string | null }): Promise<void> {
-  const itemToEdit = dialog.value?.item
+  const itemToEdit = dialog.value?.getItem()
+
   try{
     if (itemToEdit) {
       await updateItem(listId.value, itemToEdit.id, payload.name, payload.description)
@@ -60,7 +64,8 @@ async function handleSaveItem(payload: { name: string, description: string | nul
       showNotification('Item adicionado com sucesso', 'success');
     }
   } catch (error) {
-    showNotification('Erro ao adicionar item', 'error');
+    showNotification(`Erro ao ${itemToEdit ? 'atualizar' : 'adicionar'} item: ${getApiErrorMessage(error)}`, 'error');
+
   }
 
 }
@@ -69,12 +74,17 @@ async function handleSaveItem(payload: { name: string, description: string | nul
 async function loadData() {
   try {
     await fetchListById(listId.value);
-  } catch (error: unknown) {
-    console.error('Erro ao buscar detalhes da lista', error);
-    router.replace({ name: 'not-found' });
-  } finally {
-    // Só agenda a próxima busca DEPOIS que a atual terminou
     scheduleNextPoll();
+
+  } catch (error: unknown) {
+    if(error instanceof AxiosError && error.response?.status === 404) {
+      router.replace({ name: 'not-found' });
+      return;
+    } else{
+      const message = getApiErrorMessage(error);
+      showNotification('Erro ao buscar detalhes da lista:' + message, 'error');
+    }
+    console.error('Erro ao buscar detalhes da lista', error);
   }
 }
 
@@ -93,9 +103,6 @@ watch(
   { immediate: true }
 )
 
-onMounted(() => {
-  loadData(); // Primeira execução
-});
 
 onUnmounted(() => {
   if (pollingInterval) clearTimeout(pollingInterval);
