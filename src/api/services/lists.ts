@@ -33,15 +33,14 @@ export const listService = {
   },
 
   transform(raw: ListRaw): List {
-    const list = raw;
     return {
-      id: list.uuid,
-      title: list.title,
-      itemsCount: list.items_count,
-      sharedWith: list.shared_with_count,
-      items: list.items && list.items?.length > 0 ? list.items.map(item => (itemService.transform(item))) : [],
-      createdAt: list.created_at,
-      updatedAt: list.updated_at
+      id: raw.uuid,
+      title: raw.title,
+      itemsCount: raw.items_count,
+      sharedWith: raw.shared_with_count,
+      items: raw.items && raw.items?.length > 0 ? raw.items.map(item => (itemService.transform(item))) : [],
+      createdAt: raw.created_at,
+      updatedAt: raw.updated_at
     };
   }
 }

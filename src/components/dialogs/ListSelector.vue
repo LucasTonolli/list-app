@@ -1,22 +1,22 @@
 
 <script setup lang="ts">
 import type { List } from '@/types/models/List';
-import { ref } from 'vue'
+import { ref, type DeepReadonly } from 'vue'
 
 
 defineProps<{
-  lists: List[]
+  lists: DeepReadonly<List[]>
   currentListId: string|undefined
 }>()
 const emit = defineEmits<{
-  (e: 'select', list: List): void
+  (e: 'select', list: DeepReadonly<List>): void
   (e: 'remove', id: string): void
   (e: 'edit', id: string): void
 }>()
 
 
 const dialog = ref<HTMLDialogElement | null>(null)
-const listToRemove = ref<List | null>(null)
+const listToRemove = ref<DeepReadonly<List> | null>(null)
 
 function open(): void {
   dialog.value?.showModal()

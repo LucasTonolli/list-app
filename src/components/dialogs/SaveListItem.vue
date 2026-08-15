@@ -40,7 +40,18 @@ function open(): void {
   dialog.value?.showModal()
 }
 
-defineExpose({ open, item })
+function openForEdit(itemToEdit: ListItem) {
+  item.value = itemToEdit
+  form.name = itemToEdit.name
+  form.description = itemToEdit.description ?? ''
+  dialog.value?.showModal()
+}
+
+function getItem(): ListItem | null {
+  return item.value
+}
+
+defineExpose({ open, openForEdit, getItem })
 
 </script>
 

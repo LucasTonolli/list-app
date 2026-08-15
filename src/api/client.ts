@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 const client = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -16,5 +16,28 @@ client.interceptors.request.use((config) => {
   }
   return config;
 });
+
+client.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+    }
+
+    if(error instanceof AxiosError) {
+      return error.response?.data?.message ?? error.message
+    }
+    return String(error);
+  }
+)
+export function getApiErrorMessage(error: unknown): string {
+  if (error instanceof AxiosError) {
+    return error.response?.data?.message ?? error.message;
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return String(error);
+}
 
 export default client;

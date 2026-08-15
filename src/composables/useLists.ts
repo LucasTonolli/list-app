@@ -1,4 +1,4 @@
-import { ref, computed } from "vue"
+import { ref, readonly } from "vue"
 import type { List } from "@/types/models/List"
 import type { ListItem } from "@/types/models/ListItem"
 import { listService } from "@/api/services/lists"
@@ -36,12 +36,8 @@ const removeList = async (id: string) => {
 
 const fetchLists = async () => {
   isLoading.value = true
-
   try {
-    const response = await listService.getLists()
-    lists.value = response
-  } catch (error) {
-    console.error(error)
+    lists.value = await listService.getLists()
   } finally {
     isLoading.value = false
   }
@@ -52,40 +48,39 @@ const getListById = (id: string) => {
 }
 
 const fetchListById = async (id: string) => {
-  try {
-    const enrichedList = await listService.getById(id);
-    const index = lists.value.findIndex(l => l.id === id);
-    if (index !== -1) {
-      // Atualiza a lista existente com os itens detalhados
-      lists.value[index] = enrichedList;
-    } else {
-      // Se por algum motivo a lista não estava no cache, adiciona
-      lists.value.push(enrichedList);
-    }
-  } catch (error) {
-    console.error("Erro ao buscar detalhes da lista", error);
-    throw error;
+
+  const enrichedList = await listService.getById(id);
+  const index = lists.value.findIndex(l => l.id === id);
+  if (index !== -1) {
+    // Atualiza a lista existente com os itens detalhados
+    lists.value[index] = enrichedList;
+  } else {
+    // Se por algum motivo a lista não estava no cache, adiciona
+    lists.value.push(enrichedList);
   }
 }
 
 
 const addItem = async (listId: string, itemName: string, itemDescription: string|null) => {
   const list = getListById(listId)
-  if (list) {
-    const item: ListItem = await itemService.addItem(listId, {
-      name: itemName,
-      description: itemDescription
-    })
-    list.items.push(item)
-  }
+
+  if(!list) return;
+
+  const item: ListItem = await itemService.addItem(listId, {
+    name: itemName,
+    description: itemDescription
+  })
+  list.items.push(item)
 }
 
 const bulkAddItems = async (listId: string, items: { name: string }[]) => {
   const list = getListById(listId)
-  if (list) {
-    const addedItems = await itemService.bulkAddItems(listId, { items })
-    list.items.push(...addedItems)
-  }
+
+  if(!list) return;
+
+  const addedItems = await itemService.bulkAddItems(listId, { items })
+  list.items.push(...addedItems)
+
 }
 
 const updateItem = async (listId: string, itemId: string, name: string, description: string|null) => {
@@ -114,31 +109,25 @@ const toggleItem = async (listId: string, itemId: string) => {
 
   const index = list.items.findIndex(l => l.id === itemId);
 
-  if (index !== -1) {
-    try {
-      const updatedItem = await itemService.toggleItem(listId, itemId)
+  if (index === -1)  return
 
-      list.items.splice(index, 1, updatedItem)
-
-    } catch (error) {
-      console.error("Erro ao alternar status do item:", error)
-    }
-  }
-
+  const updatedItem = await itemService.toggleItem(listId, itemId)
+  list.items.splice(index, 1, updatedItem)
 }
 
 const removeItem = async (listId: string, itemId: string) => {
   const list = getListById(listId)
-  if (list) {
-    await itemService.deleteItem(listId, itemId)
-    list.items = list.items.filter(item => item.id !== itemId)
-  }
+
+  if(!list) return;
+
+  await itemService.deleteItem(listId, itemId)
+  list.items = list.items.filter(item => item.id !== itemId)
 }
 
 export function useLists() {
 
   return {
-    lists: computed(() => lists.value),
+    lists: readonly(lists),
     isLoading,
     fetchLists,
     createList,
